@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="success">{{create_success}}</div>
+
+<h2>{{groupname}}</h2>
+<a href="/manage-list">Edit my list</a> | 
+<a align="center" href="/create-list?g={{group_id}}">Create a list</a>
+
+{% if group_lists %}
+
+<form method="post">
+    {#<input type="submit" value="Buy Items"> #}
+{% for grouplist in group_lists %}
+
+    {% if grouplist['creator_id'] != user.key.id() or grouplist['other_person'] == True %}
+
+<h3>{{grouplist['listname']}}</h3>
+
+        <table>
+        <th> 
+            Buy
+        </th>
+            
+
+        {% for item in grouplist['items'] %}
+
+        <tr>
+        <td align="center">
+            {% if not item.get('bought') %}
+            <input type="checkbox" name="buy_{{grouplist['list_id']}}_{{item['item']}}">
+            {% endif %}
+        </td>    
+          <td>
+            {% if item.get('bought') %}
+            <div class="bought-item">{{item['item']}}</div>
+              {% else %}
+            {{item['item']}}
+              {% endif %}
+          </td>
+          <td>
+              {% if item.get('bought') %}
+              <div class="bought-item"> - {{item['note']}}</div>
+              {% elif item.get('note') %}
+              <div class="note-on-item"> - {{item['note']}}</div>
+              {% endif %}
+          </td>
+          <td>
+              {% if not item.get('bought') and item.get('link') %}
+              <a href="{{item['link']}}" target="_blank">Buy it online</a>
+              {% endif %}
+          </td>
+          
+              {% if item.get('bought')[0] == user.key.id() %}
+            <td class="unbuy-item">
+                <input type="checkbox" name="unbuy_{{grouplist['list_id']}}_{{item['item']}}"> Un-buy this item
+                </td>
+              {% elif item.get('bought') %}
+            <td class="buyer-of-item">
+             Bought by {{item['bought'][1]}}
+            </td>
+              {% endif %}
+
+          </td>
+        </tr>
+            {% endfor %}
+</table>
+
+
+<hr width="300">
+
+        {% endif %}
+    
+{% endfor %}
+<input type="submit" value="Save">
+</form>       
+{% endif %}
+
+{% endblock %}
+
+
+
+
+
+
+        
+
+
+

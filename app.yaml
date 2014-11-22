@@ -1,0 +1,14 @@
+application: list-tracker
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /.*
+  script: list-tracker.app
+  secure: always
+
+libraries:
+- name: jinja2
+  version: latest

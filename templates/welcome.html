@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h2>Welcome, {{user.firstname}}</h2>
+
+
+
+Below is a list of your groups. Click on the link next to your group to go to the group's page.
+<br><br>
+
+{% if groups %}
+{% for group in groups%}
+
+<li>{{group.groupname}}: <a href="/groups?g={{group.group}}">See group lists</a> | <a href="/manage-list">Edit my list</a> | <a href="/create-list?g={{group.group}}">Create list</a></li>
+
+{#
+<a href="/see-members?g={{group.group}}">See Members</a>
+#}
+
+{% endfor %}
+{% endif %}
+
+{% endblock %}
+
+

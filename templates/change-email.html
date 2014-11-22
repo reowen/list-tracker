@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Change Email</h2>
+    <form method="post">
+        <label>
+            <div>Old Email</div>
+            <input type="text" name="email" value="{{email}}">
+            <div class="error">{{email_error}}</div>
+        </label>
+        
+        <label>
+            <div>New Email</div>
+            <input type="text" name="new_email" value="{{new_email}}">
+            <div class="error">{{new_email_error}}</div>
+        </label>
+
+        <label>
+            <div>Verify Email</div>
+            <input type="text" name="verify_email" value="{{new_email}}">
+            <div class="error">{{verify_email_error}}</div>
+        </label>
+
+        <label>
+            <div>Password</div>
+            <input type="password" name="email_password">
+            <div class="error">{{email_pw_error}}</div>
+        </label>
+        <br>
+      <input type="submit" value="Change Email">
+    </form>
+
+<br>
+<br>
+<div class="success">{{email_success}}</div>
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if groups %}
+{% for k, v in groups.iteritems() %}
+
+<li>{{v}}: <a href="/groups?g={{k}}">Go to group page</a></li>
+
+{% endfor %}
+{% endif %}
+
+{% endblock %}
+
+

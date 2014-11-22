@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Login</h2>
+    <form method="post">
+        <label>
+            <div>Email</div>
+            <input type="text" name="email" value="{{email}}">
+            <div class="error">{{email_error}}</div>
+        </label>
+        <br>
+        <label>
+            <div>Password</div>
+            <input type="password" name="password" value="{{pw}}">
+            <div class="error">{{pw_error}}</div>
+        </label>
+        <br>
+        <input type="checkbox" name="remember">Keep me logged in
+        <br>
+        <br>
+        <input type="submit" value="Sign In">
+    </form>
+<br>
+<div class="error">{{reset_pw | safe}}</div>
+
+<br>
+<a href="/signup">Create a new user account</a>
+
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Create a New Group</h2>
+    <form method="post">
+        <label>
+            <div>Group Name</div>
+            <input type="text" name="groupname" value="{{groupname}}">
+            <div class="error">{{groupname_error}}</div>
+        </label>
+        <br>
+        <label>
+            <div>Rewrite Group Name</div>
+            <input type="text" name="verify_groupname" value="{{groupname}}">
+            <div class="error">{{verify_groupname_error}}</div>
+        </label>
+        <br>
+        <label>
+            <div>Group Password</div>
+            <input type="password" name="password">
+            <div class="error">{{pw_error}}</div>
+        </label>
+        <br>
+        <label>
+            <div>Verify Password</div>
+            <input type="password" name="verify">
+            <div class="error">{{verify_error}}</div>
+        </label>
+        <br>
+        <input type="radio" name="invite" value="now"> Invite people to join your group
+        <br><input type="radio" name="invite" value="later"> Invite people later
+        <br><br>
+        <input type="submit" value="Create Group">
+    </form>
+<br>
+
+<div class="success">{{success}}</div>
+
+{% endblock %}

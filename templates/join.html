@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2>Join a Group</h2>
+    <form method="post">
+        <label>
+            <div>Group Name (case sensitive)</div>
+            <input type="text" name="groupname" value="{{group}}">
+        </label>
+        <br>
+        <label>
+            <div>Group Password</div>
+            <input type="password" name="password">
+            <div class="error">{{error}}</div>
+        </label>
+        <br>
+        <br>
+        <br>
+        <input type="submit" value="Next">
+    </form>
+
+<div class="success">{{success}}</div>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<h2>Welcome, {{user.firstname}}</h2>
+
+Your lists:
+<br><br>
+
+{{nolist}}
+
+{% if lists %}
+{% for list in lists %}
+
+<li>{{list.groupname}} - {{list.listname}}: <a href="/edit-list?l={{list.key.id()}}">Edit List</a></li>
+
+{% endfor %}
+{% endif %}
+
+{% endblock %}
+
+

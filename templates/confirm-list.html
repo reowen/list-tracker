@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="success">{{created_success}}</div>
+
+<h2>List Confirmation</h2>
+
+<a href="/edit-list?l={{list_id}}">Edit List</a> | <a href="/groups?g={{group_id}}">Go to Group</a>
+
+<br>
+<br>
+
+{% for row in confirm_list %}
+
+<li>{{row['item']}} <div class="note-on-item"> - {{row['note']}}</div> - <a href="{{row['link']}}">Link to item</a></li>
+            
+              {% endfor %}
+
+{% endblock %}
+
+
+
+
+
+
+        
+
+
+
