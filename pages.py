@@ -10,7 +10,7 @@ class MainPage(admin.Handler):
         if self.user:
             groups = admin.User.get_groups(self.user.key.id())
             self.render('welcome.html', user = self.user,
-                        groups=groups, text = admin.show_secret())
+                        groups=groups)
         else:
             self.redirect('/login')
         

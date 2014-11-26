@@ -394,9 +394,6 @@ try:
 except ImportError:
     secret = 'limelight'
 
-def show_secret():
-    return secret
-
 def hash_str(s):
     return hmac.new(secret, s).hexdigest()
 
