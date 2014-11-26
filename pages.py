@@ -73,27 +73,30 @@ class GroupPage(admin.Handler):
             GroupPage.group_lists = []
             referer = self.request.headers.get('referer', '/')
             group_id = self.request.get('g')
-            params = dict(user = self.user)
-            #extract the lists for the group
-            raw_group_lists = list(admin.WishList.by_group(group_id))
+            g = admin.Group.by_id(int(group_id))
+            if not g:
+                self.redirect('/')
+            else:
+                params = dict(user = self.user,
+                              groupname = g.groupname,
+                              group_id = g.key.id())
+                #extract the lists for the group
+                raw_group_lists = list(admin.WishList.by_group(group_id))
 
             if not raw_group_lists:
-                g = admin.Group.by_id(int(group_id))
-                params['groupname'] = g.groupname
-                params['group_id'] = g.key.id()
-                params['create_success'] = '%s currently has no lists.  Click the link below to create a list.' % g.groupname
+                params['no_list_msg'] = '%s currently has no lists.  Click the above link to create a list.' % g.groupname
                 if 'my-groups/create-group' in referer:
                     params['create_success'] = 'Successfully created group %s!  Click the link below to create a list.' % g.groupname
                 elif 'my-groups/join-group' in referer:
-                    params['create_success'] = 'Successfully joined group %s!  Here, you can view the lists for this group, or create your own list by clicking the link below.' % g.groupname
-                    
+                    params['create_success'] = 'Successfully joined group %s!  Here, you can view the lists for this group, or create your own list by clicking the link below.' % g.groupname 
+                self.render('group-page.html', **params)
+            elif len(raw_group_lists) == 1 and raw_group_lists[0].creator_id == self.user.key.id():
+                params['no_list_msg'] = '%s currently has no lists to display. Tell your friends to make a list!' % g.groupname
                 self.render('group-page.html', **params)
             else:
                 #groupname, id class variables to be used in POST
-                GroupPage.groupname = raw_group_lists[0].groupname
-                GroupPage.group_id = raw_group_lists[0].group
-                params['groupname'] = GroupPage.groupname
-                params['group_id'] = GroupPage.group_id
+                GroupPage.groupname = g.groupname
+                GroupPage.group_id = g.key.id()
                 
                 #create dictionary of lists to pass through jinja template
                 #group_lists dict class variable to be used in POST request
