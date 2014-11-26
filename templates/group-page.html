@@ -45,14 +45,14 @@
           <td>
               {% if not item.get('bought') and item.get('link') %}
               <a href="{{item['link']}}" target="_blank">Buy it online</a>
-              {% endif %}
-          </td>
-          <td>
-              {% if item.get('bought')[0] == user.key.id() %}
+	      {% elif item.get('bought')[0] == user.key.id() %}
               <input type="checkbox" name="unbuy_{{grouplist['list_id']}}_{{item['item']}}"> Un-buy this item
               {% elif item.get('bought') %}
-              <div class="buyer-of-item">bought by {{item['bought'][1]}}</div>      
-              {% elif item.get('note') %}
+              <div class="buyer-of-item">bought by {{item['bought'][1]}}</div>
+              {% endif %}
+          </td>
+          <td>   
+              {% if not item.get('bought') and item.get('note') %}
               <div class="note-on-item"> - {{item['note']}}</div>
               {% endif %}
           </td>
