@@ -388,8 +388,15 @@ import string
 """
 Cookie security procedures
 """
+try:
+    import limelight
+    secret = limelight.Secret.secret
+except ImportError:
+    secret = 'limelight'
 
-secret = 'limelight'
+def show_secret():
+    return secret
+
 def hash_str(s):
     return hmac.new(secret, s).hexdigest()
 
