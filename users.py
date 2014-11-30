@@ -92,13 +92,12 @@ class Login(admin.Handler):
                 self.login(u)
             self.redirect('/')
         else:
-            if email == 'greg.owen05@gmail.com':
-                params['reset_pw'] = """Hey Greg. I updated the login security,
-                                        so you may need to reset your password.
-                                        <a href="/z55GjR9J964bW7trF3PkezxRCdRTn6lmvAefieXX">Follow this link to reset your password</a>"""
+            email_found = admin.User.by_email(email)
+            if not email_found:
+                params['email_error'] = "Email not found."
             else:
                 #this error msg would also come up if email not in system
-                params['email_error'] = 'Email and password do not match.'
+                params['pw_error'] = 'Email and password do not match.'
             self.render('login.html', **params)
           
 class Logout(admin.Handler):
