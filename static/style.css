@@ -1,11 +1,13 @@
 body {
-    position: relative;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    width: 1200px;
-    margin: 0px auto;
-    padding: 10px;
-    color: #333;
+  font: 14px Helvetica, Arial, sans-serif;
+}
+
+hr {
+  border: none;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+  color #333;
 }
 
 table {
@@ -14,7 +16,7 @@ table {
     padding: 0px;
     margin: 0px;
 }
-    
+
 h1 {
     background-color: #ddd;
     color: #888;
@@ -57,7 +59,7 @@ h2 {
     color: gray;
     position: absolute;
 }
-    
+
 h2 {
     font-size: 24px;
     font-weight: bold;
@@ -84,7 +86,7 @@ label + label {
 input[type=text].note {
     width:500px;
 }
-    
+
 {#
 input[type=text] {
     width: 500px;
@@ -93,7 +95,7 @@ input[type=text] {
     font-family: monospace;
 }
 #}
-    
+
 textarea {
   width: 500px;
   height: 400px;
@@ -144,7 +146,7 @@ input[type=submit] {
 .note-on-item {
     color: gray;
 }
-    
+
 .bought-item {
     color: gray;
     text-decoration: line-through;
