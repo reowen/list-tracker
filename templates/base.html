@@ -6,46 +6,46 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link href="/static/style.css" type="text/css" rel="stylesheet">
   <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/static/style.css" type="text/css" rel="stylesheet">
 
   <title>List Tracker</title>
 </head>
 
 
 <body>
-    <a href="/" class="main-title">List Tracker</a>
-  <div class="login-area">
-    {% if user %}
-      {{user.firstname}} |
-      <a class="login-link" href="/account-management">
-      manage my account</a> |
-      (<a class="login-link" href="/logout">logout</a>)
-    {% else %}
-      <a class="login-link" href="/login">login</a>
-      |
-      <a class="login-link" href="/signup">signup</a>
-    {% endif %}
-  </div>
-    <div class="front-area">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <a href="/" class="main-title">List Tracker</a>
+      </div>
+      <div class="col-md-6 login-area text-right">
         {% if user %}
-          <a class="front-link" href="/">
-          My Groups</a> |
-          <a class="front-link" href="/manage-list">
-          My Lists</a> |
-          <a class="front-link" href="/my-groups/create-group">
-          Create a Group</a> |
-          <a class="front-link" href="/my-groups/join-group">
-          Join a Group</a> {#|
-        <a class="front-link" href="/my-groups/find-group">Find a Group</a> | #}
-
+          {{user.firstname}} |
+          <a class="login-link" href="/account-management">
+            manage my account</a> |
+            (<a class="login-link" href="/logout">logout</a>)
+        {% else %}
+            <a class="login-link" href="/login">login</a>
+            |
+            <a class="login-link" href="/signup">signup</a>
         {% endif %}
+
+      </div>
     </div>
-  <div id="content">
-      <br><hr><br>
+    <div class="row">
+      <div class="col-md-12">
+        <hr>
+      </div>
+    </div>
       {{text | safe}}
   {% block content %}
   {% endblock %}
+  </div>
+
+
+
+
   </div>
 </body>
 
