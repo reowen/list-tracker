@@ -2,24 +2,29 @@
 
 {% block content %}
 
-<h2>Join a Group</h2>
-    <form method="post">
-        <label>
-            <div>Group Name (case sensitive)</div>
-            <input type="text" name="groupname" value="{{group}}">
-        </label>
-        <br>
-        <label>
-            <div>Group Password</div>
-            <input type="password" name="password">
-            <div class="error">{{error}}</div>
-        </label>
-        <br>
-        <br>
-        <br>
-        <input type="submit" value="Next">
-    </form>
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h2>Join a Group</h2>
+  </div>
+</div>
 
-<div class="success">{{success}}</div>
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+    <form role="form" method="post">
+      <div class="form-group">
+        <label>Group Name</label>
+        <input type="text" class="form-control" name="groupname" value="{{group}}" placeholder="group name (case sensitive)">
+      </div>
+      <div class="form-group">
+        <label>Group Password</label>
+        <input type="password" class="form-control" name="password" placeholder="password">
+        <div class="error">{{error}}</div>
+      </div>
+      <button type="submit" class="btn btn-primary">Next</button>
+    </form>
+    <br>
+    <div class="success">{{success}}</div>
+  </div>
+</div>
 
 {% endblock %}
