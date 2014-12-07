@@ -16,21 +16,16 @@
 <body>
   <div class="container">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-6 text-left">
         <a href="/" class="main-title">List Tracker</a>
       </div>
       <div class="col-md-6 login-area text-right">
         {% if user %}
-          {{user.firstname}} |
-          <a class="login-link" href="/account-management">
-            manage my account</a> |
-            (<a class="login-link" href="/logout">logout</a>)
-        {% else %}
-            <a class="login-link" href="/login">login</a>
-            |
-            <a class="login-link" href="/signup">signup</a>
-        {% endif %}
-
+        {{user.firstname}} |
+        <a class="login-link" href="/account-management">
+          manage account</a> |
+          <a class="login-link" href="/logout">logout</a>
+          {% endif %}
       </div>
     </div>
     <div class="row">
