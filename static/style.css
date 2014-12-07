@@ -33,9 +33,7 @@ h2 {
 .login-area {
     font-size: 13px;
     color: gray;
-    position: absolute;
     top: 10px;
-    right: 10px;
 }
 
 .login-link {
@@ -90,7 +88,9 @@ input[type=text].note {
     font-size: 40px;
     font-weight: bold;
     text-align: left;
-    margin-bottom: 30px;
+    margin-right: 10%;
+    margin-top: 5%;
+    /*margin-bottom: 5%;*/
     text-decoration: none;
 }
 
