@@ -22,14 +22,14 @@ class Signup(admin.Handler):
         email = email.lower()
         password = self.request.get('password')
         verify = self.request.get('verify')
-        group = self.request.get('group')       
+        group = self.request.get('group')
 
         params = dict(firstname = firstname, lastname = lastname,
                       email = email)
 
-        
-        
-        
+
+
+
         if not firstname:
             params['firstname_error'] = "First name is required"
             has_error = True
@@ -68,7 +68,7 @@ class Signup(admin.Handler):
 ##            else:
 ##                self.redirect('/')
 
-#consider updating the validations for this class           
+#consider updating the validations for this class
 class Login(admin.Handler):
     def get(self):
         if self.user:
@@ -99,7 +99,7 @@ class Login(admin.Handler):
                 #this error msg would also come up if email not in system
                 params['pw_error'] = 'Email and password do not match.'
             self.render('login.html', **params)
-          
+
 class Logout(admin.Handler):
     def get(self):
         self.logout()
@@ -131,7 +131,7 @@ class ResetPassword(admin.Handler):
         elif new_password != verify:
             params['new_pw_error'] = 'New password and verify password do not match.'
             has_error = True
-            
+
         if has_error:
             self.render('reset-password.html', **params)
 
@@ -142,7 +142,7 @@ class ResetPassword(admin.Handler):
             params['pw_success'] = 'Successfully changed your password.'
             self.render('reset-password.html', **params)
 
-            
+
 class ChangePassword(admin.Handler):
     def get(self):
         if not self.user:
@@ -165,7 +165,7 @@ class ChangePassword(admin.Handler):
         elif new_password != verify:
             params['new_pw_error'] = 'New password and verify password do not match.'
             has_error = True
-            
+
         if has_error:
             self.render('change-password.html', **params)
 
@@ -174,9 +174,9 @@ class ChangePassword(admin.Handler):
             u.pw = new_pw_hash
             u.put()
             params['pw_success'] = 'Successfully changed your password.'
-            self.render('change-password.html', **params)      
-            
-        
+            self.render('change-password.html', **params)
+
+
 class ChangeEmail(admin.Handler):
     def get(self):
         if self.user:
@@ -201,7 +201,7 @@ class ChangeEmail(admin.Handler):
         if not u:
             params['email_error'] = 'Email and password do not match'
             self.render('change-email.html', **params)
-        
+
         if not valid_email(new_email):
             params['new_email_error'] = "That's not a valid email."
             has_error = True
@@ -213,16 +213,17 @@ class ChangeEmail(admin.Handler):
             self.render('change-email.html', **params)
         else:
             key = admin.User.by_id(self.user.key.id())
-            if key:    
+            if key:
                 key.email = new_email
                 #you have to hash the password with the new user email,
                 #otherwise the login function won't work.
                 key.pw = admin.make_pw_hash(new_email, email_password)
                 key.put()
+                params['email'] = new_email
                 params['email_success'] = 'Email successfully changed to %s' % new_email
                 self.render('change-email.html', **params)
 
-    
+
 
 """
 Form validation procedures
@@ -293,6 +294,3 @@ def check_pw(name, pw, h):
     salt = h.split(',')[1]
     #then we pass the extracted salt through our make_pw_hash function
     return h == make_pw_hash(name, pw, salt)
-
-
-
