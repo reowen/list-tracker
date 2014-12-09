@@ -2,14 +2,60 @@
 
 {% block content %}
 
-{% if groups %}
-{% for k, v in groups.iteritems() %}
 
-<li>{{v}}: <a href="/groups?g={{k}}">Go to group page</a></li>
 
-{% endfor %}
-{% endif %}
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+    <h2>{{user.firstname}} {{user.lastname}}</h2>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-md-offset-2 text-center">
+    <div class="text-center">
+      <h3>My Groups</h3>
+      <a class="btn btn-primary" href="/my-groups/join-group">Join Group</a>
+      <a class="btn btn-primary" href="/my-groups/create-group">Create Group</a>
+    </div>
+    <hr>
+    {% if groups %}
+      {% for group in groups %}
+        <a class="btn btn-info" href="/groups?g={{k}}">{{group.groupname}}</a>
+      {% endfor %}
+    {% endif %}
+  </div>
+  <div class="col-md-4 text-center">
+    <div class="text-center">
+      <h3>My Lists</h3>
+      <a class="btn btn-primary" href="/create-list">Create List</a>
+      <a class="btn btn-primary" href="/edit-list">Edit List</a>
+    </div>
+    <hr>
+
+  </div>
+</div>
+
+
+
+
 
 {% endblock %}
 
 
+
+{#
+
+
+Below is a list of your groups. Click on the link next to your group to go to the group's page.
+<br><br>
+
+{% if groups %}
+{% for group in groups%}
+
+<li>{{group.groupname}}: <a href="/groups?g={{group.group}}">See group lists</a> | <a href="/manage-list">Edit my list</a> | <a href="/create-list?g={{group.group}}">Create list</a></li>
+
+{#
+  <a href="/see-members?g={{group.group}}">See Members</a>
+  #}
+
+#}
