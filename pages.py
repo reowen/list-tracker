@@ -9,7 +9,7 @@ class MainPage(admin.Handler):
     def get(self):
         if self.user:
             groups = admin.User.get_groups(self.user.key.id())
-            self.render('welcome.html', user = self.user,
+            self.render('front.html', user = self.user,
                         groups=groups)
         else:
             self.redirect('/login')
