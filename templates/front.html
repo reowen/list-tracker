@@ -20,7 +20,20 @@
     <hr>
     {% if groups %}
       {% for group in groups %}
-        <a class="btn btn-info" href="/groups?g={{k}}">{{group.groupname}}</a>
+        <div class="row front-box-list">
+          <div class="col-md-5">
+            {{group.groupname}}
+          </div>
+          <div class="col-md-3">
+            <a class="btn btn-info btn-sm" href="/groups?g={{group.group}}">See Group</a>
+          </div>
+          <div class="col-md-3">
+            <a class="btn btn-info btn-sm" href="/create-list?g={{group.group}}">Make a List</a>
+          </div>
+        </div>
+        <div class="row">
+          <hr>
+        </div>
       {% endfor %}
     {% endif %}
   </div>

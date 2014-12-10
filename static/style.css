@@ -62,10 +62,12 @@ h2 {
 }
 */
 
-.group-name {
+.front-box-list {
   font-size: 16px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   margin-right: 10px;
+  text-align: left;
+  padding-left: 5%;
 }
 
 /*
