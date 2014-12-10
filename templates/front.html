@@ -13,6 +13,25 @@
 <div class="row">
   <div class="col-md-4 col-md-offset-2 text-center">
     <div class="text-center">
+      <h3>My Lists</h3>
+      <a class="btn btn-primary" href="/create-list">Create List</a>
+    </div>
+    <hr>
+    {% if lists %}
+    {% for list in lists %}
+      <div class="row front-box-list">
+        <div class="col-md-4">
+          {{list.groupname}}
+        </div>
+        <div class="col-md-3 front-list-item">
+          <a class="btn btn-info btn-xs" href="/edit-list?l={{list.key.id()}}">Edit "{{list.listname}}"</a>
+        </div>
+      </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+  <div class="col-md-4 text-center">
+    <div class="text-center">
       <h3>My Groups</h3>
       <a class="btn btn-primary" href="/my-groups/join-group">Join Group</a>
       <a class="btn btn-primary" href="/my-groups/create-group">Create Group</a>
@@ -21,38 +40,43 @@
     {% if groups %}
       {% for group in groups %}
         <div class="row front-box-list">
-          <div class="col-md-5">
+          <div class="col-md-4">
             {{group.groupname}}
           </div>
           <div class="col-md-3 front-list-item">
-            <a class="btn btn-info btn-sm" href="/groups?g={{group.group}}">See Group</a>
+            <a class="btn btn-info btn-xs" href="/groups?g={{group.group}}">See Group</a>
           </div>
           <div class="col-md-3 front-list-item">
-            <a class="btn btn-info btn-sm" href="/create-list?g={{group.group}}">Make a List</a>
+            <a class="btn btn-info btn-xs" href="/create-list?g={{group.group}}">Make a List</a>
           </div>
-        </div>
-        <div class="row">
-          <hr>
         </div>
       {% endfor %}
     {% endif %}
   </div>
-  <div class="col-md-4 text-center">
-    <div class="text-center">
-      <h3>My Lists</h3>
-      <a class="btn btn-primary" href="/create-list">Create List</a>
-      <a class="btn btn-primary" href="/edit-list">Edit List</a>
-    </div>
-    <hr>
-
-  </div>
 </div>
 
-
-
-
-
 {% endblock %}
+
+{#
+
+  {% if lists %}
+  {% for list in lists %}
+
+  {% endfor %}
+  {% endif %}
+
+
+
+  {% if lists %}
+  {% for list in lists %}
+
+  <li>{{list.groupname}} - {{list.listname}}: <a href="/edit-list?l={{list.key.id()}}">Edit List</a></li>
+
+  {% endfor %}
+  {% endif %}
+
+
+#}
 
 
 
