@@ -8,27 +8,39 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-4 col-md-offset-2 text-center">
-    <div class="text-center">
-      <h3>My Lists</h3>
-      <a class="btn btn-primary" href="/create-list">Create List</a>
+<div class="row front-box">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="row">
+      <div class="col-md-6">
+        <h3 class="text-center front-box-title">My Lists</h3>
+      </div>
+      <div class="col-md-6 text-left">
+        <a class="btn btn-primary btn-sm" href="/create-list">Create List</a>
+      </div>
     </div>
     <hr>
     {% if lists %}
     {% for list in lists %}
       <div class="row front-box-list">
-        <div class="col-md-4">
-          {{list.groupname}}
+        <div class="col-md-6">
+          <div class="col-md-6">{{list.groupname}}</div>
+          <div class="col-md-6"> ({{list.listname}})</div>
         </div>
-        <div class="col-md-3 front-list-item">
-          <a class="btn btn-info btn-xs" href="/edit-list?l={{list.key.id()}}">Edit "{{list.listname}}"</a>
+        <div class="col-md-2 front-list-item">
+          <a class="btn btn-info btn-xs" href="/edit-list?l={{list.key.id()}}">Edit</a>
         </div>
       </div>
     {% endfor %}
     {% endif %}
   </div>
-  <div class="col-md-4 text-center">
+</div>
+
+<div class="row">
+  <hr>
+</div>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 text-center">
     <div class="text-center">
       <h3>My Groups</h3>
       <a class="btn btn-primary" href="/my-groups/join-group">Join Group</a>
