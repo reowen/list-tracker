@@ -30,6 +30,19 @@ h2 {
     text-align: center;
 }
 
+footer {
+  margin-top: 20px;
+  border-top: 1px solid #CCC;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #CCC;
+}
+
+.footer-link {
+  color: gray;
+  text-decoration: none;
+}
+
 .login-area {
     font-size: 13px;
     color: gray;

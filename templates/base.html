@@ -51,19 +51,13 @@
 
 <body>
   <div class="container">
+    {#
     <div class="row">
       <div class="col-md-6 text-left">
         <a href="/" class="main-title">List Tracker</a>
       </div>
-      <div class="col-md-6 login-area text-right">
-        {% if user %}
-        {{user.firstname}} |
-        <a class="login-link" href="/account-management">
-          manage account</a> |
-          <a class="login-link" href="/logout">logout</a>
-          {% endif %}
-      </div>
     </div>
+    #}
     <div class="row">
       <div class="col-md-12">
         <hr>
@@ -74,10 +68,26 @@
   {% endblock %}
   </div>
 
-
-
-
   </div>
+
+  {% if user %}
+  <div class="container">
+    <footer>
+      <ul class="nav navbar-nav">
+        <li>
+          <a class="footer-link" href="/">Home</a>
+        </li>
+        <li>
+          <a class="footer-link" href="/account-management">Manage Account</a>
+        </li>
+        <li>
+          <a class="footer-link" href="/logout">Logout</a>
+        </li>
+      </ul>
+    </footer>
+  </div>
+  {% endif %}
+
 </body>
 
 </html>
