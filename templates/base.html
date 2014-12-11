@@ -8,10 +8,45 @@
 
   <link href="/static/css/bootstrap.min.css" rel="stylesheet">
   <link href="/static/style.css" type="text/css" rel="stylesheet">
+  <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="/static/js/jquery-1.11.1.min.js"></script>
 
   <title>List Tracker</title>
 </head>
+
+<nav class="navbar navbar-default" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle Navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">List Tracker</a>
+  </div>
+
+  <div class="collapse navbar-collapse navbar-ex1-collapse">
+    <ul class="nav navbar-nav navbar-right">
+      {% if user %}
+        <li>
+          <a>{{user.firstname}}</a>
+        </li>
+        <li>
+          <a href="/account-management">Manage Account</a>
+        </li>
+        <li>
+          <a class="login-link" href="/logout">Logout</a>
+        </li>
+      {% else %}
+      <li>
+        <a href="/login">Login</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+
+</nav>
 
 
 <body>
