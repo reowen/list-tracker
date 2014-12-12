@@ -76,7 +76,8 @@ footer {
 */
 
 .front-box {
-  margin: 10px;
+  border: 1px solid transparent;
+  border-color: #DDD;
 }
 
 .front-box-header {
@@ -88,7 +89,7 @@ footer {
 .front-box-title {
   margin: 0;
   color: white;
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .front-box-list {
