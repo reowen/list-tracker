@@ -140,6 +140,10 @@ input[type=text].note {
     text-decoration: none;
 }
 
+.item-row {
+  margin-bottom: 10px;
+}
+
 .note-on-item {
     color: gray;
 }

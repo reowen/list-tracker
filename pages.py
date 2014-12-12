@@ -91,7 +91,7 @@ class GroupPage(admin.Handler):
                 elif 'my-groups/join-group' in referer:
                     params['create_success'] = 'Successfully joined group %s!  Here, you can view the lists for this group, or create your own list by clicking the link below.' % g.groupname
                 self.render('group-page.html', **params)
-            elif len(raw_group_lists) == 1 and raw_group_lists[0].creator_id == self.user.key.id():
+            elif len(raw_group_lists) == 1 and raw_group_lists[0].creator_id == self.user.key.id() and raw_group_lists[0].for_other_person == False:
                 params['no_list_msg'] = '%s currently has no lists to display. Tell your friends to make a list!' % g.groupname
                 self.render('group-page.html', **params)
             else:

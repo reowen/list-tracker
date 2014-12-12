@@ -2,22 +2,19 @@
 
 {% block content %}
 
-<div class="row">
-  <div class="col-md-4 col-md-offset-4">
-    <h2>{{groupname}}</h2>
+<div class="row" style="margin-bottom: 5px;">
+  <div class="col-md-6 text-center">
+    <h2 style="margin: 0;">{{groupname}}</h2>
+  </div>
+  <div class="col-md-6 text-center">
+    <a class="btn btn-primary" href="/create-list?g={{group_id}}">Create List</a>
+    <a class="btn btn-primary" href="/manage-list">Edit my list</a>
   </div>
 </div>
 
 <div class="row">
   <div class="col-md-4 col-md-offset-4">
     <div class="success">{{create_success}}</div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-md-6 col-md-offset-3">
-    <a class="btn btn-primary" href="/create-list?g={{group_id}}">Create List</a>
-    <a class="btn btn-primary" href="/manage-list">Edit my list</a>
   </div>
 </div>
 
@@ -45,16 +42,51 @@
       <hr>
     </div>
   </div>
-
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
+  <div class="col-md-8 col-md-offset-2">
       <form role="form" method="post">
+        {% for grouplist in group_lists %}
+          {% if grouplist['creator_id'] != user.key.id() or grouplist['other_person'] == True %}
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <h3>{{grouplist['listname']}}</h3>
+            </div>
+          </div>
+            {% for item in grouplist['items'] %}
+            <div class="row item-row">
+              <div class="col-md-8"><! list item names>
+                  {% if item.get('bought') %}
+                    <div class="bought-item">{{item['item']}}</div>
+                  {% else %}
+                    <div>{{item['item']}}</div>
+                  {% endif %}
+                  {% if not item.get('bought') and item.get('note') %} <! only display note if item not bought>
+                  <div class="note-on-item"> - {{item['note']}}</div>
+                  {% endif %}
+              </div>
+              <div class="col-md-2">
+                {% if item.get('link') %}
+                <a class="btn btn-default btn-xs" href="{{item['link']}}" target="_blank">See Item</a>
+                {% else %}
+                <div> </div>
+                {% endif %}
+              </div>
+              <div class="col-md-2"> <! buy and un-buy checkboxes>
+                {% if not item.get('bought') %}
+                Buy <input type="checkbox" name="buy_{{grouplist['list_id']}}_{{item['item']}}">
+                {% elif item.get('bought')[0] == user.key.id() %}
+                Un-buy <input type="checkbox" name="unbuy_{{grouplist['list_id']}}_{{item['item']}}">
+                {% endif %}
+              </div>
+            </div>
+            <hr>
+            {% endfor %} <! close "for item in grouplist['items']">
+          {% endif %} <! close "if grouplist['creator_id'] != user.key.id() ...">
+        {% endfor %} <! close "for grouplist in group_lists">
         <button type="submit" class="btn btn-primary">Save</button>
       </form>
     </div>
-  </div>
 
-{% endif %}
+{% endif %} <! close "if group_lists">
 
 {% endblock %}
 
