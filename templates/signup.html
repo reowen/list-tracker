@@ -2,46 +2,44 @@
 
 {% block content %}
 
-<h2>Signup Page</h2>
-    <form method="post">
-        <label>
-            <div>First Name</div>
-            <input type="text" name="firstname" value="{{firstname}}">
-            <div class="error">{{firstname_error}}</div>
-        </label>
-        <label>
-            <div>Last Name</div>
-            <input type="text" name="lastname" value="{{lastname}}">
-            <div class="error">{{lastname_error}}</div>
-        </label>
-        <br>
-        <label>
-            <div>Password</div>
-            <input type="password" name="password" value="{{pw}}">
-            <div class="error">{{pw_error}}</div>
-        </label>
-        <br>
-        <label>
-            <div>Verify Password</div>
-            <input type="password" name="verify" value="{{verify_pw}}">
-            <div class="error">{{verify_error}}</div>
-        </label>
-        <br>
-        <label>
-            <div>Email</div>
-            <input type="text" name="email" value="{{user}}">
-            <div class="error">{{email_error}}</div>
-        </label><br>
-        
-        {#
-        <input type="radio" name="group" value="join"> I want to join a group
-        <br><input type="radio" name="group" value="create"> I want to create a new group
-        <br><input type="radio" name="group" value="later"> I'll deal with groups later
-        <br> 
-        #}
-        
-        <br>
-        <input type="submit" value="Sign Up">
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h2>Signup Page</h2>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+    <form role="form" method="post">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" class="form-control" name="firstname" value="{{firstname}}" placeholder="first name">
+        <div class="error">{{firstname_error}}</div>
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" class="form-control" name="lastname" value="{{lastname}}" placeholder="last name">
+        <div class="error">{{lastname_error}}</div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-control" name="password" placeholder="password">
+        <div class="error">{{pw_error}}</div>
+      </div>
+      <div class="form-group">
+        <label>Verify Password</label>
+        <input type="password" class="form-control" name="verify" placeholder="retype password">
+        <div class="error">{{verify_error}}</div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="form-control" name="email" value="{{email}}" placeholder="email address">
+        <div class="error">{{email_error}}</div>
+      </div>
+      <button type="submit" class="btn btn-primary">Sign Up</button>
     </form>
+  </div>
+</div>
+
 
 {% endblock %}

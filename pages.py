@@ -9,11 +9,12 @@ class MainPage(admin.Handler):
     def get(self):
         if self.user:
             groups = admin.User.get_groups(self.user.key.id())
-            self.render('welcome.html', user = self.user,
-                        groups=groups)
+            lists = admin.WishList.by_user(self.user.key.id())
+            self.render('front.html', user = self.user,
+                        groups=groups, lists=lists)
         else:
             self.redirect('/login')
-        
+
 class ManageAccount(admin.Handler):
     def get(self):
         if not self.user:
@@ -86,18 +87,18 @@ class GroupPage(admin.Handler):
             if not raw_group_lists:
                 params['no_list_msg'] = '%s currently has no lists.  Click the above link to create a list.' % g.groupname
                 if 'my-groups/create-group' in referer:
-                    params['create_success'] = 'Successfully created group %s!  Click the link below to create a list.' % g.groupname
+                    params['create_success'] = "Successfully created group %s!  Click the link below to create a list, and don't forget to invite your friends!" % g.groupname
                 elif 'my-groups/join-group' in referer:
-                    params['create_success'] = 'Successfully joined group %s!  Here, you can view the lists for this group, or create your own list by clicking the link below.' % g.groupname 
+                    params['create_success'] = 'Successfully joined group %s!  Here, you can view the lists for this group, or create your own list by clicking the link below.' % g.groupname
                 self.render('group-page.html', **params)
-            elif len(raw_group_lists) == 1 and raw_group_lists[0].creator_id == self.user.key.id():
+            elif len(raw_group_lists) == 1 and raw_group_lists[0].creator_id == self.user.key.id() and raw_group_lists[0].for_other_person == False:
                 params['no_list_msg'] = '%s currently has no lists to display. Tell your friends to make a list!' % g.groupname
                 self.render('group-page.html', **params)
             else:
                 #groupname, id class variables to be used in POST
                 GroupPage.groupname = g.groupname
                 GroupPage.group_id = g.key.id()
-                
+
                 #create dictionary of lists to pass through jinja template
                 #group_lists dict class variable to be used in POST request
                 for g_list in raw_group_lists:
@@ -108,7 +109,7 @@ class GroupPage(admin.Handler):
                                                   'items': g_list.items})
                 params['group_lists'] = GroupPage.group_lists
                 self.render('group-page.html', **params)
-            
+
     def post(self):
         #update = True when something is bought (in any list).
         #if update = False, clicking submit does nothing
@@ -126,7 +127,7 @@ class GroupPage(admin.Handler):
                 unbuy_req = 'un' + bought_req
                 bought = self.request.get(bought_req)
                 unbought = self.request.get(unbuy_req)
-                
+
                 if bought:
                     g_list['updated'] = True
                     item['bought'] = [self.user.key.id(), self.user.firstname]
@@ -139,12 +140,12 @@ class GroupPage(admin.Handler):
 
         #after updating in the loop above, pass new lists through template
         params['group_lists'] = GroupPage.group_lists
-        
+
         #if someone bought anything, find the modified lists and save them
         if update:
             for save_list in GroupPage.group_lists:
                 if 'updated' in save_list:
-                    export_items = format_bought_items(save_list['items'])                   
+                    export_items = format_bought_items(save_list['items'])
                     if export_items:
                         save = admin.WishList.update_items(save_list['list_id'],
                                                            export_items)
@@ -157,13 +158,13 @@ class GroupPage(admin.Handler):
                             params['text'] = 'There was an error.'
             #update group-lists cache
             admin.WishList.by_group(group_id, update = True)
-                        
+
         self.render('group-page.html', **params)
-    
 
 
-            
-        
+
+
+
 """
 Functions for extracting, formatting item lists
 """
@@ -174,5 +175,3 @@ def format_bought_items(bought_items):
         if 'checked' in item:
             del item['checked']
     return return_items
-                        
-    

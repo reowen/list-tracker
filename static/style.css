@@ -1,0 +1,165 @@
+/*
+body {
+  font: 14px Helvetica, Arial, sans-serif;
+}
+*/
+
+hr {
+  border: none;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px;
+  color #333;
+}
+
+table {
+    font: 14px Helvetica, Arial, sans-serif;
+    width: auto;
+    padding: 0px;
+    margin: 0px;
+}
+
+h1 {
+    background-color: #ddd;
+    color: #888;
+    margin: 0;
+    height: 50px;
+}
+
+h2 {
+    text-align: center;
+}
+
+footer {
+  margin-top: 20px;
+  border-top: 1px solid #CCC;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: #CCC;
+}
+
+.footer-link {
+  color: gray;
+  text-decoration: none;
+}
+
+.login-area {
+    font-size: 13px;
+    color: gray;
+    top: 10px;
+}
+
+.login-link {
+    color: gray;
+    text-decoration: none;
+}
+
+.login-link:visited {
+    color: gray;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
+.front-link {
+    color: gray;
+    text-decoration: none;
+}
+
+/*
+.front-area {
+    font-size: 13px;
+    color: gray;
+    position: absolute;
+}
+*/
+
+.front-box {
+  border: 1px solid transparent;
+  border-color: #DDD;
+}
+
+.front-box-header {
+  margin: 0;
+  padding: 5px;
+  background-color: #337AB7;
+}
+
+.front-box-title {
+  margin: 0;
+  color: white;
+  font-size: 20px;
+}
+
+.front-box-list {
+  font-size: 16px;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  text-align: left;
+  padding-left: 5%;
+}
+
+.front-list-item {
+  margin-bottom: 5px;
+}
+
+/*
+h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+*/
+
+.error {
+    color: red;
+}
+
+.success {
+    color: blue;
+}
+
+label + label {
+    margin-top: 20px;
+}
+
+input[type=text].note {
+    width:500px;
+}
+
+.main-title {
+    display: block;
+    color: #222;
+    font-size: 40px;
+    font-weight: bold;
+    text-align: left;
+    margin-right: 10%;
+    margin-top: 5%;
+    /*margin-bottom: 5%;*/
+    text-decoration: none;
+}
+
+.item-row {
+  margin-bottom: 10px;
+}
+
+.note-on-item {
+    color: gray;
+}
+
+.bought-item {
+    color: gray;
+    text-decoration: line-through;
+}
+
+.unbuy-item {
+    color: blue;
+    position: relative; right: auto;
+}
+
+.buyer-of-item {
+    color: gray;
+    font-style: italic;
+    position: relative; left: 7px;
+}

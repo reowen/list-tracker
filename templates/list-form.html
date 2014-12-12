@@ -2,116 +2,115 @@
 
 {% block content %}
 
-<div class="success">{{create_success}}</div>
+<div class="row">
+  <div class="col-md-12 text-center">
+    <div class="success">{{create_success}}</div>
+  </div>
+</div>
 
-<h2>{{header}}</h2>
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h2>{{header}}</h2>
+  </div>
+</div>
 
-{{prompt | safe}}
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    {{prompt | safe}}
+  </div>
+</div>
 
-    <form method="post">
-      <table>
-        <tr>
-          <td class="label">
-            List Name
-          </td>
-          <td>
-            <input type="text" name="listname" value="{{listname}}">
-          </td>
-          <td class="error">
-            {{error_listname}}
-          </td>
-        </tr>
-        <tr>
-        <td> </td> 
-        {% if not edit %}
-        <td>
-        <input type="checkbox" name="other_person" {{checked}}>Make this list on behalf of another person
-        </td>
-            {% endif %}
-        <td class="error">{{error_checkbox}}</td>
-        </tr>
-        </table>
-<br>
-In the box below, enter the item name, a link to where group members can buy the item (for instance, on Amazon or another website), and any notes about the item (such as a shirt size, preferred color, etc...).
-<br>
-        <table>
-        <th> 
-            {% if edit %}Delete Item
-            {% else %} {% endif %}
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <form role="form" method="post">
+      <div class="form-group">
+        <label>List Name</label>
+        <input type="text" class="form-control" name="listname" value="{{listname}}" placeholder="list name">
+        <div class="error">{{error_listname}}</div>
+      </div>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="other_person" {{checked}}>Make this list on behalf of another person
+        </label>
+        <div class="error">{{error_checkbox}}</div>
+      </div>
+      <table class="form-group">
+        <th>
+          {% if edit %}
+            Delete
+          {% endif %}
         </th>
-        <th>Item Name</th>
+        <th class="text-center">Item Name</th>
         <th>Link to Item</th>
         <th>Notes on Item</th>
         <th> </th>
 
+        {% for row in range(0, numrows) %}
+          {% set rownum = row + 1 %}
 
-{% for row in range(0, numrows) %}
-            {% set rownum = row + 1 %}
+          {% if render_row and row < length %}
 
-            {% if render_row and row < length %}
-
-            
-        <tr>
-        <td align="center">
-              {% if edit %}
-            <input type="checkbox" name="del_{{row}}">
-              {% else %}
-            {{rownum}}
-              {% endif %}
-        </td>    
-          <td>
-              {% if edit %}
-            {{render_row[row]['item']}}
-              <input type="hidden" name="item_{{row}}" value="{{render_row[row]['item']}}">
-              {% else %} 
-              <input type="text" name="item_{{row}}" value="{{render_row[row]['item']}}">
-              {% endif %}  
-          </td>
-          <td>
-            <input type="text" name="link_{{row}}" value="{{render_row[row]['link']}}">
-          </td>
-          <td>
-            <input type="text" class="note" name="note_{{row}}" value="{{render_row[row]['note']}}">
-          </td>
-          <td class="error">
-            {{render_row[row]['error']}}
-          </td>
-        </tr>
-
-            {% else %}
-        
-            
-        <tr>
-        <td align="center">
+          <tr>
+            <td align="center">
               {% if edit %}
               <input type="checkbox" name="del_{{row}}">
               {% else %}
-            {{rownum}}
+              {{rownum}}
               {% endif %}
-        </td> 
-          <td>
-            <input type="text" name="item_{{row}}">
-          </td>
-          <td>
-            <input type="text" name="link_{{row}}">
-          </td>
-          <td>
-            <input type="text" name="note_{{row}}" class="note">
-          </td>
+            </td>
+            <td>
+              {% if edit %}
+              {{render_row[row]['item']}}
+              <input type="hidden" name="item_{{row}}" value="{{render_row[row]['item']}}">
+              {% else %}
+              <input type="text" name="item_{{row}}" value="{{render_row[row]['item']}}">
+              {% endif %}
+            </td>
+            <td>
+              <input type="text" name="link_{{row}}" value="{{render_row[row]['link']}}">
+            </td>
+            <td>
+              <input type="text" class="note" name="note_{{row}}" value="{{render_row[row]['note']}}">
+            </td>
+            <td class="error">
+              {{render_row[row]['error']}}
+            </td>
+          </tr>
+
+          {% else %}
+
+
+          <tr>
+            <td align="center">
+              {% if edit %}
+              <input type="checkbox" name="del_{{row}}">
+              {% else %}
+              {{rownum}}
+              {% endif %}
+            </td>
+            <td>
+              <input type="text" name="item_{{row}}">
+            </td>
+            <td>
+              <input type="text" name="link_{{row}}">
+            </td>
+            <td>
+              <input type="text" name="note_{{row}}" class="note">
+            </td>
 
           </td>
         </tr>
-            
-            {% endif %}
 
-{% endfor %}
+        {% endif %}
+
+        {% endfor %}
 
       </table>
-
-      <input type="submit" value="Save List">
+      <button type="submit" class="btn btn-primary">Save List</button>
     </form>
-
-<div class="success">{{success}}</div>
-<div class="error">{{process_error}}</div>
+    <div class="success">{{success}}</div>
+    <div class="error">{{process_error}}</div>
+  </div>
+</div>
 
 {% endblock %}

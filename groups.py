@@ -23,7 +23,8 @@ class CreateGroup(admin.Handler):
         verify = self.request.get('verify')
         invite = self.request.get('invite')
 
-        params = dict(user = self.user, groupname = groupname)
+        params = dict(user = self.user, groupname = groupname,
+                      verify_groupname = verify_groupname)
 
         if not groupname:
             params['groupname_error'] = "Group name is required."

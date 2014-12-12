@@ -2,37 +2,39 @@
 
 {% block content %}
 
-<h2>Change Email</h2>
-    <form method="post">
-        <label>
-            <div>Old Email</div>
-            <input type="text" name="email" value="{{email}}">
-            <div class="error">{{email_error}}</div>
-        </label>
-        
-        <label>
-            <div>New Email</div>
-            <input type="text" name="new_email" value="{{new_email}}">
-            <div class="error">{{new_email_error}}</div>
-        </label>
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h2>Change Email</h2>
+  </div>
+</div>
 
-        <label>
-            <div>Verify Email</div>
-            <input type="text" name="verify_email" value="{{new_email}}">
-            <div class="error">{{verify_email_error}}</div>
-        </label>
-
-        <label>
-            <div>Password</div>
-            <input type="password" name="email_password">
-            <div class="error">{{email_pw_error}}</div>
-        </label>
-        <br>
-      <input type="submit" value="Change Email">
+<div class="row">
+  <div class="col-md-4 col-md-offset-4">
+    <form role="form" method="post">
+      <div class="form-group">
+        <label>Current Email</label>
+        <input type="email" class="form-control" name="email" value="{{email}}" placeholder="current email">
+        <div class="error">{{email_error}}</div>
+      </div>
+      <div class="form-group">
+        <label>New Email</label>
+        <input type="email" class="form-control" name="new_email" value="{{new_email}}" placeholder="new email">
+        <div class="error">{{new_email_error}}</div>
+      </div>
+      <div class="form-group">
+        <label>Verify Email</label>
+        <input type="email" class="form-control" name="verify_email" placeholder="retype new email">
+        <div class="error">{{verify_email_error}}</div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-control" name="email_password">
+        <div class="error">{{email_pw_error}}</div>
+      </div>
+      <button type="submit" class="btn btn-primary">Change Email</button>
     </form>
-
-<br>
-<br>
-<div class="success">{{email_success}}</div>
+    <div class="success">{{email_success}}</div>
+  </div>
+</div>
 
 {% endblock %}

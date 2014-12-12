@@ -2,14 +2,69 @@
 
 {% block content %}
 
-{% if groups %}
-{% for k, v in groups.iteritems() %}
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="row front-box front-box-header">
+      <div class="col-md-6">
+        <div class="text-center front-box-title">My Lists</div>
+      </div>
+      <div class="col-md-6 text-right">
+        <a class="btn btn-default btn-sm" href="/create-list">Create List</a>
+      </div>
+    </div>
+    {% if lists %}
+    <div class="front-box">
+      <hr>
+      {% for list in lists %}
+        <div class="row front-box-list">
+          <div class="col-md-6">
+            <div class="col-md-6">{{list.listname}}</div>
+            <div class="col-md-6"> ({{list.groupname}})</div>
+          </div>
+          <div class="col-md-2 front-list-item text-center">
+            <a class="btn btn-default btn-sm" href="/edit-list?l={{list.key.id()}}">Edit</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
 
-<li>{{v}}: <a href="/groups?g={{k}}">Go to group page</a></li>
+<div class="row">
+  <hr>
+</div>
 
-{% endfor %}
-{% endif %}
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="row front-box front-box-header">
+      <div class="col-md-6">
+        <div class="text-center front-box-title">My Groups</div>
+      </div>
+      <div class="col-md-6 text-right">
+        <a class="btn btn-default btn-sm" href="/my-groups/join-group">Join Group</a>
+        <a class="btn btn-default btn-sm" href="/my-groups/create-group">Create Group</a>
+      </div>
+    </div>
+    {% if groups %}
+    <div class="front-box">
+      <hr>
+      {% for group in groups %}
+      <div class="row front-box-list">
+        <div class="col-md-4">
+          {{group.groupname}}
+        </div>
+        <div class="col-md-2 front-list-item">
+          <a class="btn btn-default btn-sm" href="/groups?g={{group.group}}">See Group</a>
+        </div>
+        <div class="col-md-2 front-list-item">
+          <a class="btn btn-default btn-sm" href="/create-list?g={{group.group}}">Make a List</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
 
 {% endblock %}
-
-
