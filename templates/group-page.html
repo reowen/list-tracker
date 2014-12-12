@@ -66,16 +66,16 @@
               </div>
               <div class="col-md-2">
                 {% if item.get('link') %}
-                <a class="btn btn-default btn-xs" href="{{item['link']}}" target="_blank">See Item</a>
+                <a class="btn btn-default btn-sm" href="{{item['link']}}" target="_blank">See Item</a>
                 {% else %}
                 <div> </div>
                 {% endif %}
               </div>
               <div class="col-md-2"> <! buy and un-buy checkboxes>
                 {% if not item.get('bought') %}
-                Buy <input type="checkbox" name="buy_{{grouplist['list_id']}}_{{item['item']}}">
+                <input type="checkbox" name="buy_{{grouplist['list_id']}}_{{item['item']}}"> Buy
                 {% elif item.get('bought')[0] == user.key.id() %}
-                Un-buy <input type="checkbox" name="unbuy_{{grouplist['list_id']}}_{{item['item']}}">
+                <div style="color: #337AB7;"><input type="checkbox" name="unbuy_{{grouplist['list_id']}}_{{item['item']}}"> Un-buy</div>
                 {% endif %}
               </div>
             </div>
