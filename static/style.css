@@ -74,25 +74,24 @@ footer {
     position: absolute;
 }
 */
-
-.front-box {
-  border: 1px solid transparent;
-  border-color: #DDD;
-}
-
-.front-box-header {
+.page-box-header {
   margin: 0;
   padding: 5px;
   background-color: #337AB7;
 }
 
-.front-box-title {
+.page-box-title {
   margin: 0;
   color: white;
   font-size: 20px;
 }
 
-.front-box-list {
+.page-box {
+  border: 1px solid transparent;
+  border-color: #DDD;
+}
+
+.page-box-list {
   font-size: 16px;
   margin-bottom: 10px;
   margin-right: 10px;
@@ -141,7 +140,11 @@ input[type=text].note {
 }
 
 .item-row {
-  margin-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 10px;
+  text-align: left;
+  padding-left: 5%;
 }
 
 .note-on-item {

@@ -7,8 +7,8 @@
     <h2 style="margin: 0;">{{groupname}}</h2>
   </div>
   <div class="col-md-6 text-center">
-    <a class="btn btn-primary" href="/create-list?g={{group_id}}">Create List</a>
-    <a class="btn btn-primary" href="/manage-list">Edit my list</a>
+    <a class="btn btn-default" href="/create-list?g={{group_id}}">Create List</a>
+    <a class="btn btn-default" href="/manage-list">Edit my list</a>
   </div>
 </div>
 
@@ -46,11 +46,12 @@
       <form role="form" method="post">
         {% for grouplist in group_lists %}
           {% if grouplist['creator_id'] != user.key.id() or grouplist['other_person'] == True %}
-          <div class="row">
+          <div class="row page-box page-box-header">
             <div class="col-md-12 text-center">
-              <h3>{{grouplist['listname']}}</h3>
+              <div class="page-box-title">{{grouplist['listname']}}</div>
             </div>
           </div>
+          <div class="page-box">
             {% for item in grouplist['items'] %}
             <div class="row item-row">
               <div class="col-md-8"><! list item names>
@@ -80,7 +81,9 @@
             </div>
             <hr>
             {% endfor %} <! close "for item in grouplist['items']">
+          </div>
           {% endif %} <! close "if grouplist['creator_id'] != user.key.id() ...">
+        <hr>
         {% endfor %} <! close "for grouplist in group_lists">
         <button type="submit" class="btn btn-primary">Save</button>
       </form>

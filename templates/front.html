@@ -4,19 +4,19 @@
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <div class="row front-box front-box-header">
+    <div class="row page-box page-box-header">
       <div class="col-md-6">
-        <div class="text-center front-box-title">My Lists</div>
+        <div class="text-center page-box-title">My Lists</div>
       </div>
       <div class="col-md-6 text-right">
         <a class="btn btn-default btn-sm" href="/create-list">Create List</a>
       </div>
     </div>
     {% if lists %}
-    <div class="front-box">
+    <div class="page-box">
       <hr>
       {% for list in lists %}
-        <div class="row front-box-list">
+        <div class="row page-box-list">
           <div class="col-md-6">
             <div class="col-md-6">{{list.listname}}</div>
             <div class="col-md-6"> ({{list.groupname}})</div>
@@ -37,9 +37,9 @@
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
-    <div class="row front-box front-box-header">
+    <div class="row page-box page-box-header">
       <div class="col-md-6">
-        <div class="text-center front-box-title">My Groups</div>
+        <div class="text-center page-box-title">My Groups</div>
       </div>
       <div class="col-md-6 text-right">
         <a class="btn btn-default btn-sm" href="/my-groups/join-group">Join Group</a>
@@ -47,10 +47,10 @@
       </div>
     </div>
     {% if groups %}
-    <div class="front-box">
+    <div class="page-box">
       <hr>
       {% for group in groups %}
-      <div class="row front-box-list">
+      <div class="row page-box-list">
         <div class="col-md-4">
           {{group.groupname}}
         </div>
