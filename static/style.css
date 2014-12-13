@@ -74,6 +74,10 @@ footer {
     position: absolute;
 }
 */
+.header-color {
+  background-color: #337AB7;
+}
+
 .page-box-header {
   margin: 0;
   padding: 5px;
