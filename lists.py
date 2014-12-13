@@ -58,7 +58,7 @@ class CreateList(admin.Handler):
             group_id = self.request.get('g')
             CreateList.group = admin.Group.by_id(int(group_id))
             CreateList.groupname = str(CreateList.group.groupname)
-            
+
             header = 'Make a new list for %s' % CreateList.groupname
             self.render('list-form.html',
                         user = self.user,
@@ -90,20 +90,20 @@ class CreateList(admin.Handler):
             has_error = True
         else:
             params['listname'] = listname
-        
+
         for row in range(0, numrows):
             item_req = 'item_%s' % row
             item = self.request.get(item_req)
 
             link_req = 'link_%s' % row
             link = self.request.get(link_req)
-            
+
             note_req = 'note_%s' % row
             note = self.request.get(note_req)
 
 ##            if not valid_item(item):
-                
-            
+
+
             if valid_item(item):
 ##                if item in items:
 ##                    render_row.append({'item': item,
@@ -141,7 +141,7 @@ class CreateList(admin.Handler):
                 self.render('list-form.html', **params)
             else:
                 self.render('list-form.html', **params)
-           
+
         else:
             numitems = len(items)
             params['listname'] = listname
@@ -161,7 +161,7 @@ class CreateList(admin.Handler):
                 #update group-lists cache
                 admin.WishList.by_group(self.request.get('g'), update = True)
 
-                params['create_success'] = 'Successfully created list %s!' % listname
+                params['create_success'] = 'Successfully created %s!' % listname
                 params['group_id'] = group_id
                 params['list_id'] = l_key.id()
                 params['confirm_list'] = render_row
@@ -181,7 +181,7 @@ class CreateList(admin.Handler):
                 params['list_id'] = l_key.id()
                 params['confirm_list'] = render_row
                 self.render('confirm-list.html', **params)
-                
+
 ##                self.redirect('/edit-list?l=%d' % l_key.id())
 
 class EditList(admin.Handler):
@@ -193,11 +193,11 @@ class EditList(admin.Handler):
             referer = self.request.headers.get('referer', '/')
             l = self.request.get('l')
             edit_list = admin.WishList.by_id(int(l))
-            
+
             if not edit_list:
                 self.render('front.html', user=self.user,
                             text = "It appears that list doesn't exist")
-                
+
             orig_listname = str(edit_list.listname)
             EditList.edit_items = list(edit_list.items)
             render_row = list(edit_list.items)
@@ -229,7 +229,7 @@ class EditList(admin.Handler):
                       listname = listname,
                       render_row = render_row,
                       length = len(render_row) + 5)
-        
+
         if not listname:
             params['error_listname'] = 'Please provide a list name.'
             has_error = True
@@ -242,7 +242,7 @@ class EditList(admin.Handler):
 
             link_req = 'link_%s' % row
             link = self.request.get(link_req)
-            
+
             note_req = 'note_%s' % row
             note = self.request.get(note_req)
 
@@ -254,14 +254,14 @@ class EditList(admin.Handler):
                     for e in EditList.edit_items:
                         if e['item'] == item:
                             EditList.edit_items.remove(e)
-                            
+
                 elif item in new_items:
                     render_row.append({'item': item,
                                        'link': link,
                                        'note': note,
                                        'error': 'You listed this item more than once.  Please delete this row or rename the item'})
                     has_error = True
-                    
+
 ##                elif not valid_link(link) and link:
 ##                    render_row.append({'item': item,
 ##                                       'link': link,
@@ -280,14 +280,14 @@ class EditList(admin.Handler):
                                    'error': 'Link or note must have a corresponding item.'})
                 has_error = True
 
-        
+
         if has_error:
             params['render_row'] = render_row
             params['length'] = len(render_row)
             self.render('list-form.html', **params)
-           
+
         else:
-            
+
             params['render_row'] = render_row
             params['length'] = len(render_row)
             params['numrows'] = len(render_row) + 5
@@ -305,7 +305,7 @@ class EditList(admin.Handler):
                     new_items.append({'item': row['item'],
                                       'note': row['note'],
                                       'link': row['link']})
-                
+
             l = self.request.get('l')
             l_new = admin.WishList.by_id(int(l))
             l_new.listname = self.request.get('listname')
@@ -321,7 +321,7 @@ class EditList(admin.Handler):
                 #update group-lists cache
                 admin.WishList.by_group(l_new_group_id, update = True)
                 params['success'] = 'Successfully updated your list.'
-           
+
             self.render('list-form.html', **params)
 
 
@@ -361,7 +361,7 @@ def extract_list(items):
                                    'note': v['note'],
                                    'bought': v['bought']})
     return extracted_list
-        
+
 def edit_list(name, link, note, item_dict):
     new_dict = list(item_dict)
     for item in item_dict:
@@ -375,9 +375,7 @@ def edit_list(name, link, note, item_dict):
                               'link': link,
                               'note': note})
     return new_dict
-            
+
 def path_referrer(referrer):
     pos = referrer.find('?')
     return referrer[:pos]
-    
-    

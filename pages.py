@@ -91,7 +91,7 @@ class GroupPage(admin.Handler):
             if not raw_group_lists:
                 params['no_list_msg'] = '%s currently has no lists.  Click the above link to create a list.' % g.groupname
                 if 'my-groups/create-group' in referer:
-                    params['create_success'] = "Successfully created group %s!  Click the link below to create a list, and don't forget to invite your friends!" % g.groupname
+                    params['create_success'] = "Successfully created group %s!  Now invite your friends!" % g.groupname
                 elif 'my-groups/join-group' in referer:
                     params['create_success'] = 'Successfully joined group %s!  Here, you can view the lists for this group, or create your own list by clicking the link below.' % g.groupname
                 self.render('group-page.html', **params)

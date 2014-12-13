@@ -2,29 +2,40 @@
 
 {% block content %}
 
-<div class="success">{{created_success}}</div>
+<div class="row" style="margin-bottom: 5px;">
+  <div class="col-md-6 text-center">
+    <h2 style="margin: 0;">{{create_success}}</h2>
+  </div>
+  <div class="col-md-6 text-center">
+    <a class="btn btn-default" href="/edit-list?l={{list_id}}">Edit List</a>
+    <a class="btn btn-default" href="/groups?g={{group_id}}">Go to Group</a>
+  </div>
+</div>
 
-<h2>List Confirmation</h2>
+<div class="row">
+  <div class="col-md-12">
+    <hr>
+  </div>
+</div>
 
-<a href="/edit-list?l={{list_id}}">Edit List</a> | <a href="/groups?g={{group_id}}">Go to Group</a>
+<div class="col-md-8 col-md-offset-2">
+  {% for row in confirm_list %}
+      <div class="row item-row">
+        <div class="col-md-8">
+          <div>{{row['item']}}</div>
+          <div class="note-on-item"> - {{row['note']}}</div>
+        </div>
+        <div class="col-md-2">
+          {% if row.get('link') %}
+          <a class="btn btn-default btn-sm" href="{{row['link']}}" target="_blank">Link to Item</a>
+          {% else %}
+          <div> </div>
+          {% endif %}
+        </div>
+      </div>
+      <hr>
+  {% endfor %} <! close "for row in confirm_list">
+</div>
 
-<br>
-<br>
-
-{% for row in confirm_list %}
-
-<li>{{row['item']}} <div class="note-on-item"> - {{row['note']}}</div> - <a href="{{row['link']}}">Link to item</a></li>
-            
-              {% endfor %}
 
 {% endblock %}
-
-
-
-
-
-
-        
-
-
-
