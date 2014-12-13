@@ -24,13 +24,17 @@ class ManageAccount(admin.Handler):
                         user = self.user)
 
 welcome_page = """
-<h2>Welcome to List Tracker</h2>
-<pre>Let's get started:
-
-You can join an existing group: <a href="/my-groups/join-group">Join a Group</a>
-
-Or you can create a new group: <a href="/my-groups/create-group">Create a Group</a>
-</pre>
+<div class="row">
+<div class="col-md-12 text-center">
+<h2>Welcome to List Tracker!</h2>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6 col-md-offset-3">
+To get started, create a new group or join an existing group.  Then, make and share your list!
+</div>
+</div>
+<hr>
 """
 
 class Welcome(admin.Handler):
