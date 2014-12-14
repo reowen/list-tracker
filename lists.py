@@ -46,39 +46,38 @@ bought by other group members.
 """
 
 class CreateList(admin.Handler):
-    #class variables to be used in GET and POST
-    group = ''
-    groupname = ''
+    numrows = 5
     def get(self):
         if not self.user:
             self.redirect('/login')
         else:
             #numrows specifies length of the input form
-            numrows = 10
+            numrows = 5
             group_id = self.request.get('g')
-            CreateList.group = admin.Group.by_id(int(group_id))
-            CreateList.groupname = str(CreateList.group.groupname)
+            group = admin.Group.by_id(int(group_id))
+            groupname = str(group.groupname)
 
-            header = 'Make a new list for %s' % CreateList.groupname
+            header = 'Create list for %s' % groupname
             self.render('list-form.html',
                         user = self.user,
                         header = header,
-                        prompt = prompt,
                         numrows = numrows)
 
     def post(self):
         #numrows specifies length of input form
-        numrows = 10
+        numrows = 5
         #items to be saved to datastore
         items = []
         #list of dicts to pass through jinja template
         render_row = []
         has_error = False
         group_id = self.request.get('g')
-        header = 'Make a new list for %s' % CreateList.groupname
+        group = admin.Group.by_id(int(group_id))
+        groupname = str(group.groupname)
+        header = 'Make a new list for %s' % groupname
+
         params = dict(user = self.user,
                       header = header,
-                      prompt = prompt,
                       numrows = numrows)
 
         listname = self.request.get('listname')
@@ -136,6 +135,11 @@ class CreateList(admin.Handler):
         if has_error:
             params['render_row'] = render_row
             params['length'] = len(render_row)
+
+            more = self.request.get('more_items')
+            if more:
+                params['numrows'] = numrows + 5
+
             if other_person:
                 params['checked'] = 'CHECKED'
                 self.render('list-form.html', **params)
@@ -149,11 +153,20 @@ class CreateList(admin.Handler):
             params['length'] = len(render_row)
             #be sure to write the new list to the dictionary, using the items
             #dictionary object we defined in this procedure
+
+            more = self.request.get('more_items')
+            if more:
+                params['numrows'] = numrows + 5
+                if other_person:
+                    params['checked'] = 'CHECKED'
+                self.render('list-form.html', **params)
+                return
+
             if other_person:
                 for_other_person = True
                 l = admin.WishList.save(listname, self.user.key.id(),
                                         self.user.firstname, group_id,
-                                        CreateList.groupname, items, for_other_person)
+                                        groupname, items, for_other_person)
                 l_key = l.put()
                 time.sleep(0.1)
                 #update user-lists cache
@@ -170,7 +183,7 @@ class CreateList(admin.Handler):
             else:
                 l = admin.WishList.save(listname, self.user.key.id(),
                                         self.user.firstname, group_id,
-                                        CreateList.groupname, items)
+                                        groupname, items)
                 l_key = l.put()
                 time.sleep(0.1)
                 #update user-lists cache

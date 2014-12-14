@@ -20,7 +20,7 @@
   </div>
 </div>
 
-<div class="col-md-8 col-md-offset-2">
+<div class="col-md-6 col-md-offset-3">
 
     <form role="form" method="post">
       <div class="form-group">
@@ -37,24 +37,44 @@
 
       {% for row in range(0, numrows) %}
         {% set rownum = row + 1 %}
-        {% if render_row and row < length %}
+        {% if render_row and row < length %} <!--"if there's an item to display"-->
 
-
-
-
-
-
-
-
+        <div class="form-group panel-group">
+          <label>Item {{rownum}}</label>
+          <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
+            Add Note
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
+            Add Link
+          </button>
+          <div class="error">{{render_row[row]['error']}}</div>
+          <input type="text" class="form-control" name="item_{{row}}" value="{{render_row[row]['item']}}" placeholder="item {{rownum}}">
+          {# if there's a note, don't collapse the div, otherwise keep it collapsed #}
+          {% if render_row[row].get('note') %}
+          <div id="note_{{row}}" class="collapse in">
+          {% else %}
+          <div id="note_{{row}}" class="collapse">
+          {% endif %}
+            <input type="text" class="form-control" name="note_{{row}}" value="{{render_row[row]['note']}}" placeholder="note for item {{rownum}}">
+          </div>
+          {# if there's a link, don't collapse the div, otherwise keep it collapsed #}
+          {% if render_row[row].get('link') %}
+          <div id="link_{{row}}" class="collapse in">
+          {% else %}
+          <div id="link_{{row}}" class="collapse">
+          {% endif %}
+            <input type="text" class="form-control" name="link_{{row}}" value="{{render_row[row]['link']}}" placeholder="link to item {{rownum}}">
+          </div>
+        </div>
 
         {% else %} <!--"if no item to display"-->
 
         <div class="form-group panel-group">
           <label>Item {{rownum}}</label>
-            <button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
               Add Note
             </button>
-            <button type="button" class="btn btn-danger" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
               Add Link
             </button>
           <input type="text" class="form-control" name="item_{{row}}" placeholder="item {{rownum}}">
@@ -69,107 +89,11 @@
         {% endif %} <!-- /"if render_row and row < length"-->
       {% endfor %} <!-- /"for rown in range(0, numrows)"-->
 
-    <button type="submit" class="btn btn-primary">Save List</button>
+    <input type="checkbox" name="more_items"> Add More Items
+    <hr>
+    <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
 </div>
-
-
-{#
-
-<div class="row">
-  <div class="col-md-8 col-md-offset-2">
-    <form role="form" method="post">
-      <div class="form-group">
-        <label>List Name</label>
-        <input type="text" class="form-control" name="listname" value="{{listname}}" placeholder="list name">
-        <div class="error">{{error_listname}}</div>
-      </div>
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" name="other_person" {{checked}}>Make this list on behalf of another person
-        </label>
-        <div class="error">{{error_checkbox}}</div>
-      </div>
-      <table class="form-group">
-        <th>
-          {% if edit %}
-            Delete
-          {% endif %}
-        </th>
-        <th class="text-center">Item Name</th>
-        <th>Link to Item</th>
-        <th>Notes on Item</th>
-        <th> </th>
-
-        {% for row in range(0, numrows) %}
-          {% set rownum = row + 1 %}
-
-          {% if render_row and row < length %}
-
-          <tr>
-            <td align="center">
-              {% if edit %}
-              <input type="checkbox" name="del_{{row}}">
-              {% else %}
-              {{rownum}}
-              {% endif %}
-            </td>
-            <td>
-              {% if edit %}
-              {{render_row[row]['item']}}
-              <input type="hidden" name="item_{{row}}" value="{{render_row[row]['item']}}">
-              {% else %}
-              <input type="text" name="item_{{row}}" value="{{render_row[row]['item']}}">
-              {% endif %}
-            </td>
-            <td>
-              <input type="text" name="link_{{row}}" value="{{render_row[row]['link']}}">
-            </td>
-            <td>
-              <input type="text" class="note" name="note_{{row}}" value="{{render_row[row]['note']}}">
-            </td>
-            <td class="error">
-              {{render_row[row]['error']}}
-            </td>
-          </tr>
-
-          {% else %}
-
-
-          <tr>
-            <td align="center">
-              {% if edit %}
-              <input type="checkbox" name="del_{{row}}">
-              {% else %}
-              {{rownum}}
-              {% endif %}
-            </td>
-            <td>
-              <input type="text" name="item_{{row}}">
-            </td>
-            <td>
-              <input type="text" name="link_{{row}}">
-            </td>
-            <td>
-              <input type="text" name="note_{{row}}" class="note">
-            </td>
-
-          </td>
-        </tr>
-
-        {% endif %}
-
-        {% endfor %}
-
-      </table>
-      <button type="submit" class="btn btn-primary">Save List</button>
-    </form>
-    <div class="success">{{success}}</div>
-    <div class="error">{{process_error}}</div>
-  </div>
-</div>
-
-#}
 
 {% endblock %}
