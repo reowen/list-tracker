@@ -2,6 +2,7 @@
 
 {% block content %}
 
+{% if lists %}
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
     <div class="row page-box page-box-header">
@@ -12,7 +13,6 @@
         {#<a class="btn btn-default btn-sm" href="/create-list">Create List</a>#}
       </div>
     </div>
-    {% if lists %}
     <div class="page-box">
       <hr>
       {% for list in lists %}
@@ -27,9 +27,9 @@
         </div>
       {% endfor %}
     </div>
-    {% endif %}
   </div>
 </div>
+{% endif %} <!--/"if lists"-->
 
 <div class="row">
   <hr>
