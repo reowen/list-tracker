@@ -176,6 +176,7 @@ class CreateList(admin.Handler):
 
 class EditList(admin.Handler):
     edit_items = []
+    rows = 0
     def get(self):
         if not self.user:
             self.redirect('/')
@@ -194,6 +195,7 @@ class EditList(admin.Handler):
             #to specify the length of the existing item list for rendering
             length = len(render_row)
             numrows = length + 5
+            EditList.rows = numrows
             params = dict(user = self.user,
                           header = 'Edit %s' % orig_listname,
                           numrows = numrows,
@@ -207,7 +209,7 @@ class EditList(admin.Handler):
             self.render('edit-list.html', **params)
 
     def post(self):
-        numrows = 10
+        numrows = EditList.rows
         new_items = []
         render_row = []
         has_error = False
@@ -252,12 +254,6 @@ class EditList(admin.Handler):
                                        'error': 'You listed this item more than once.  Please delete this row or rename the item'})
                     has_error = True
 
-##                elif not valid_link(link) and link:
-##                    render_row.append({'item': item,
-##                                       'link': link,
-##                                       'note': note,
-##                                       'error': 'Please correct the url formatting (be sure to use http://...).'})
-##                    has_error = True
                 else:
                     render_row.append({'item': item,
                                        'link': link,
@@ -270,11 +266,14 @@ class EditList(admin.Handler):
                                    'error': 'Link or note must have a corresponding item.'})
                 has_error = True
 
-
+        more = self.request.get('more_items')
         if has_error:
             params['render_row'] = render_row
             params['length'] = len(render_row)
+            if more:
+                params['numrows'] = len(render_row) + 5
             self.render('edit-list.html', **params)
+            return
 
         else:
 

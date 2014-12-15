@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12 text-center">
+    <div class="success">{{create_success}}</div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12 text-center">
+    <h2>{{header}}</h2>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    {{prompt | safe}}
+  </div>
+</div>
+
+<form role="form" method="post">
+<div class="col-md-6 col-md-offset-3">
+
+      {% for row in range(0, numrows) %}
+        {% set rownum = row + 1 %}
+        {% if render_row and row < length %} <!--"if there's an item to display"-->
+
+        <div class="form-group panel-group">
+          <label>Edit: {{render_row[row]['item']}} </label>
+          <input type="hidden" name="item_{{row}}" value="{{render_row[row]['item']}}">
+          <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
+            See Note
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
+            See Link
+          </button>
+          <div class="error">{{render_row[row]['error']}}</div>
+          {# if there's a note, don't collapse the div, otherwise keep it collapsed #}
+          {% if render_row[row].get('note') %}
+          <div id="note_{{row}}" class="collapse in">
+          {% else %}
+          <div id="note_{{row}}" class="collapse">
+          {% endif %}
+            <div class="input-group">
+              <div class="input-group-addon">note</div>
+              <input type="text" class="form-control" name="note_{{row}}" value="{{render_row[row]['note']}}" placeholder="note for {{render_row[row]['item']}}">
+            </div>
+          </div>
+          {# if there's a link, don't collapse the div, otherwise keep it collapsed #}
+          {% if render_row[row].get('link') %}
+          <div id="link_{{row}}" class="collapse in">
+          {% else %}
+          <div id="link_{{row}}" class="collapse">
+          {% endif %}
+            <div class="input-group">
+              <div class="input-group-addon">link</div>
+              <input type="text" class="form-control" name="link_{{row}}" value="{{render_row[row]['link']}}" placeholder="link to {{render_row[row]['item']}}">
+            </div>
+          </div>
+        </div>
+
+        {% else %} <!--"if no item to display"-->
+
+        <div class="form-group panel-group">
+          <label>Add Item</label>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
+              Add Note
+            </button>
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
+              Add Link
+            </button>
+            <div class="input-group">
+              <div class="input-group-addon">item</div>
+              <input type="text" class="form-control" name="item_{{row}}" placeholder="item {{rownum}}">
+            </div>
+          <div id="note_{{row}}" class="collapse">
+            <div class="input-group">
+              <div class="input-group-addon">note</div>
+              <input type="text" class="form-control" name="note_{{row}}" placeholder="note for item {{rownum}}">
+            </div>
+          </div>
+          <div id="link_{{row}}" class="collapse">
+            <div class="input-group">
+              <div class="input-group-addon">link</div>
+              <input type="text" class="form-control" name="link_{{row}}" placeholder="link to item {{rownum}}">
+            </div>
+          </div>
+        </div>
+
+        {% endif %} <!-- /"if render_row and row < length"-->
+      {% endfor %} <!-- /"for rown in range(0, numrows)"-->
+
+    <input type="checkbox" name="more_items"> Add More Items
+    <hr>
+    <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+    <hr>
+    <div class="success">{{success}}</div>
+
+</div>
+
+{% endblock %}
