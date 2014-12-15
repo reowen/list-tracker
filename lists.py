@@ -204,7 +204,7 @@ class EditList(admin.Handler):
             if 'create-list' in referer:
                 params['create_success'] = 'Successfully created %s for group %s.  If you like, you can make additional edits here.' % (edit_list.listname, edit_list.groupname)
 
-            self.render('list-form.html', **params)
+            self.render('edit-list.html', **params)
 
     def post(self):
         numrows = 10
@@ -274,7 +274,7 @@ class EditList(admin.Handler):
         if has_error:
             params['render_row'] = render_row
             params['length'] = len(render_row)
-            self.render('list-form.html', **params)
+            self.render('edit-list.html', **params)
 
         else:
 
@@ -312,7 +312,7 @@ class EditList(admin.Handler):
                 admin.WishList.by_group(l_new_group_id, update = True)
                 params['success'] = 'Successfully updated your list.'
 
-            self.render('list-form.html', **params)
+            self.render('edit-list.html', **params)
 
 
 import re

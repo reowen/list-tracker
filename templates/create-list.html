@@ -100,8 +100,11 @@
 
         {% endif %} <!-- /"if render_row and row < length"-->
       {% endfor %} <!-- /"for rown in range(0, numrows)"-->
-
-    <input type="checkbox" name="more_items"> Add More Items
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" name="more_items"> Add More Items
+      </label>
+    </div>
     <hr>
     <button type="submit" class="btn btn-primary">Submit</button>
     </form>
