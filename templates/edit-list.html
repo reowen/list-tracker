@@ -44,15 +44,21 @@
   {% for row in range(0, length) %}
 
     <div class="form-group panel-group">
-      <label>{{render_row[row]['item']}} </label>
+      <div class="col-md-6">
+        <label>{{render_row[row]['item']}} </label>
+      </div>
+      <div class="col-md-6 text-right">
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
+          See Note
+        </button>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
+          See Link
+        </button>
+      </div>
+      <hr>
       <input type="hidden" name="item_{{row}}" value="{{render_row[row]['item']}}">
-      <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
-        See Note
-      </button>
-      <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
-        See Link
-      </button>
       <div class="error">{{render_row[row]['error']}}</div>
+      <br>
       {# if there's a note, don't collapse the div, otherwise keep it collapsed #}
       {% if render_row[row].get('note') %}
       <div id="note_{{row}}" class="collapse in">
@@ -89,13 +95,18 @@
   {% set rownum = row + 1 %}
 
   <div class="form-group panel-group">
-    <label>Add Item</label>
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
-      Add Note
-    </button>
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
-      Add Link
-    </button>
+    <div class="col-md-6">
+      <label>Add Item</label>
+    </div>
+    <div class="col-md-6 text-right">
+      <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
+        Add Note
+      </button>
+      <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
+        Add Link
+      </button>
+    </div>
+    <hr>
     <div class="input-group">
       <div class="input-group-addon">item</div>
       <input type="text" class="form-control" name="item_{{row}}" placeholder="item {{rownum}}">
