@@ -176,7 +176,6 @@ class CreateList(admin.Handler):
 
 class EditList(admin.Handler):
     edit_items = []
-    rows = 0
     def get(self):
         if not self.user:
             self.redirect('/')
@@ -195,7 +194,6 @@ class EditList(admin.Handler):
             #to specify the length of the existing item list for rendering
             length = len(render_row)
             numrows = length + 5
-            EditList.rows = numrows
             params = dict(user = self.user,
                           header = 'Edit %s' % orig_listname,
                           numrows = numrows,
@@ -209,9 +207,10 @@ class EditList(admin.Handler):
             self.render('edit-list.html', **params)
 
     def post(self):
-        numrows = EditList.rows
         new_items = []
         render_row = []
+        length = len(render_row)
+        numrows = len(render_row) + 5
         has_error = False
         listname = self.request.get('listname')
         params = dict(user = self.user,
@@ -220,7 +219,7 @@ class EditList(admin.Handler):
                       edit = True,
                       listname = listname,
                       render_row = render_row,
-                      length = len(render_row) + 5)
+                      length = length)
 
         if not listname:
             params['error_listname'] = 'Please provide a list name.'
@@ -271,6 +270,8 @@ class EditList(admin.Handler):
             params['render_row'] = render_row
             params['length'] = len(render_row)
             if more:
+                params['numrows'] = len(render_row) + 10
+            else:
                 params['numrows'] = len(render_row) + 5
             self.render('edit-list.html', **params)
             return
@@ -279,7 +280,10 @@ class EditList(admin.Handler):
 
             params['render_row'] = render_row
             params['length'] = len(render_row)
-            params['numrows'] = len(render_row) + 5
+            if more:
+                params['numrows'] = len(render_row) + 10
+            else:
+                params['numrows'] = len(render_row) + 5
 
             #update the entries for the database
             new_items = list(EditList.edit_items)
