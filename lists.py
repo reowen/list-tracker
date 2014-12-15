@@ -58,7 +58,7 @@ class CreateList(admin.Handler):
             groupname = str(group.groupname)
 
             header = 'Create list for %s' % groupname
-            self.render('list-form.html',
+            self.render('create-list.html',
                         user = self.user,
                         header = header,
                         numrows = numrows)
@@ -100,30 +100,14 @@ class CreateList(admin.Handler):
             note_req = 'note_%s' % row
             note = self.request.get(note_req)
 
-##            if not valid_item(item):
-
-
             if valid_item(item):
-##                if item in items:
-##                    render_row.append({'item': item,
-##                                       'link': link,
-##                                       'note': note,
-##                                       'error': 'You listed this item more than once.  Please delete this row or rename the item'})
-##                    has_error = True
-##                if not valid_link(link) and link:
-##                    render_row.append({'item': item,
-##                                       'link': link,
-##                                       'note': note,
-##                                       'error': 'Please correct the url formatting.'})
-##                    has_error = True
-##                else:
-                    items.append({'item': item,
-                                  'link': link,
-                                  'note': note})
-                    render_row.append({'item': item,
-                                       'link': link,
-                                       'note': note,
-                                       'error': ''})
+                items.append({'item': item,
+                              'link': link,
+                              'note': note})
+                render_row.append({'item': item,
+                                   'link': link,
+                                   'note': note,
+                                   'error': ''})
             elif link or note:
                 render_row.append({'item': item,
                                    'link': link,
@@ -142,9 +126,9 @@ class CreateList(admin.Handler):
 
             if other_person:
                 params['checked'] = 'CHECKED'
-                self.render('list-form.html', **params)
-            else:
-                self.render('list-form.html', **params)
+
+            self.render('create-list.html', **params)
+            return
 
         else:
             numitems = len(items)
@@ -159,7 +143,7 @@ class CreateList(admin.Handler):
                 params['numrows'] = numrows + 5
                 if other_person:
                     params['checked'] = 'CHECKED'
-                self.render('list-form.html', **params)
+                self.render('create-list.html', **params)
                 return
 
             if other_person:
@@ -174,12 +158,6 @@ class CreateList(admin.Handler):
                 #update group-lists cache
                 admin.WishList.by_group(self.request.get('g'), update = True)
 
-                params['create_success'] = 'Successfully created %s!' % listname
-                params['group_id'] = group_id
-                params['list_id'] = l_key.id()
-                params['confirm_list'] = render_row
-                self.render('confirm-list.html', **params)
-
             else:
                 l = admin.WishList.save(listname, self.user.key.id(),
                                         self.user.firstname, group_id,
@@ -189,13 +167,12 @@ class CreateList(admin.Handler):
                 #update user-lists cache
                 admin.WishList.by_user(self.user.key.id(), update = True)
 
-                params['created_success'] = 'Successfully created list %s!' % listname
-                params['group_id'] = group_id
-                params['list_id'] = l_key.id()
-                params['confirm_list'] = render_row
-                self.render('confirm-list.html', **params)
+            params['create_success'] = 'Successfully created list %s!' % listname
+            params['group_id'] = group_id
+            params['list_id'] = l_key.id()
+            params['confirm_list'] = render_row
+            self.render('confirm-list.html', **params)
 
-##                self.redirect('/edit-list?l=%d' % l_key.id())
 
 class EditList(admin.Handler):
     edit_items = []

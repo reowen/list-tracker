@@ -23,7 +23,9 @@
       <div class="row item-row">
         <div class="col-md-8">
           <div>{{row['item']}}</div>
+          {% if row.get('note') %}
           <div class="note-on-item"> - {{row['note']}}</div>
+          {% endif %}
         </div>
         <div class="col-md-2">
           {% if row.get('link') %}
