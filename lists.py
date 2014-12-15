@@ -46,39 +46,38 @@ bought by other group members.
 """
 
 class CreateList(admin.Handler):
-    #class variables to be used in GET and POST
-    group = ''
-    groupname = ''
+    numrows = 5
     def get(self):
         if not self.user:
             self.redirect('/login')
         else:
             #numrows specifies length of the input form
-            numrows = 10
+            numrows = 5
             group_id = self.request.get('g')
-            CreateList.group = admin.Group.by_id(int(group_id))
-            CreateList.groupname = str(CreateList.group.groupname)
-            
-            header = 'Make a new list for %s' % CreateList.groupname
-            self.render('list-form.html',
+            group = admin.Group.by_id(int(group_id))
+            groupname = str(group.groupname)
+
+            header = 'Create list for %s' % groupname
+            self.render('create-list.html',
                         user = self.user,
                         header = header,
-                        prompt = prompt,
                         numrows = numrows)
 
     def post(self):
         #numrows specifies length of input form
-        numrows = 10
+        numrows = 5
         #items to be saved to datastore
         items = []
         #list of dicts to pass through jinja template
         render_row = []
         has_error = False
         group_id = self.request.get('g')
-        header = 'Make a new list for %s' % CreateList.groupname
+        group = admin.Group.by_id(int(group_id))
+        groupname = str(group.groupname)
+        header = 'Make a new list for %s' % groupname
+
         params = dict(user = self.user,
                       header = header,
-                      prompt = prompt,
                       numrows = numrows)
 
         listname = self.request.get('listname')
@@ -90,41 +89,25 @@ class CreateList(admin.Handler):
             has_error = True
         else:
             params['listname'] = listname
-        
+
         for row in range(0, numrows):
             item_req = 'item_%s' % row
             item = self.request.get(item_req)
 
             link_req = 'link_%s' % row
             link = self.request.get(link_req)
-            
+
             note_req = 'note_%s' % row
             note = self.request.get(note_req)
 
-##            if not valid_item(item):
-                
-            
             if valid_item(item):
-##                if item in items:
-##                    render_row.append({'item': item,
-##                                       'link': link,
-##                                       'note': note,
-##                                       'error': 'You listed this item more than once.  Please delete this row or rename the item'})
-##                    has_error = True
-##                if not valid_link(link) and link:
-##                    render_row.append({'item': item,
-##                                       'link': link,
-##                                       'note': note,
-##                                       'error': 'Please correct the url formatting.'})
-##                    has_error = True
-##                else:
-                    items.append({'item': item,
-                                  'link': link,
-                                  'note': note})
-                    render_row.append({'item': item,
-                                       'link': link,
-                                       'note': note,
-                                       'error': ''})
+                items.append({'item': item,
+                              'link': link,
+                              'note': note})
+                render_row.append({'item': item,
+                                   'link': link,
+                                   'note': note,
+                                   'error': ''})
             elif link or note:
                 render_row.append({'item': item,
                                    'link': link,
@@ -136,12 +119,17 @@ class CreateList(admin.Handler):
         if has_error:
             params['render_row'] = render_row
             params['length'] = len(render_row)
+
+            more = self.request.get('more_items')
+            if more:
+                params['numrows'] = numrows + 5
+
             if other_person:
                 params['checked'] = 'CHECKED'
-                self.render('list-form.html', **params)
-            else:
-                self.render('list-form.html', **params)
-           
+
+            self.render('create-list.html', **params)
+            return
+
         else:
             numitems = len(items)
             params['listname'] = listname
@@ -149,11 +137,20 @@ class CreateList(admin.Handler):
             params['length'] = len(render_row)
             #be sure to write the new list to the dictionary, using the items
             #dictionary object we defined in this procedure
+
+            more = self.request.get('more_items')
+            if more:
+                params['numrows'] = numrows + 5
+                if other_person:
+                    params['checked'] = 'CHECKED'
+                self.render('create-list.html', **params)
+                return
+
             if other_person:
                 for_other_person = True
                 l = admin.WishList.save(listname, self.user.key.id(),
                                         self.user.firstname, group_id,
-                                        CreateList.groupname, items, for_other_person)
+                                        groupname, items, for_other_person)
                 l_key = l.put()
                 time.sleep(0.1)
                 #update user-lists cache
@@ -161,31 +158,25 @@ class CreateList(admin.Handler):
                 #update group-lists cache
                 admin.WishList.by_group(self.request.get('g'), update = True)
 
-                params['create_success'] = 'Successfully created list %s!' % listname
-                params['group_id'] = group_id
-                params['list_id'] = l_key.id()
-                params['confirm_list'] = render_row
-                self.render('confirm-list.html', **params)
-
             else:
                 l = admin.WishList.save(listname, self.user.key.id(),
                                         self.user.firstname, group_id,
-                                        CreateList.groupname, items)
+                                        groupname, items)
                 l_key = l.put()
                 time.sleep(0.1)
                 #update user-lists cache
                 admin.WishList.by_user(self.user.key.id(), update = True)
 
-                params['created_success'] = 'Successfully created list %s!' % listname
-                params['group_id'] = group_id
-                params['list_id'] = l_key.id()
-                params['confirm_list'] = render_row
-                self.render('confirm-list.html', **params)
-                
-##                self.redirect('/edit-list?l=%d' % l_key.id())
+            params['create_success'] = 'Successfully created list %s!' % listname
+            params['group_id'] = group_id
+            params['list_id'] = l_key.id()
+            params['confirm_list'] = render_row
+            self.render('confirm-list.html', **params)
+
 
 class EditList(admin.Handler):
     edit_items = []
+    rows = 0
     def get(self):
         if not self.user:
             self.redirect('/')
@@ -193,17 +184,18 @@ class EditList(admin.Handler):
             referer = self.request.headers.get('referer', '/')
             l = self.request.get('l')
             edit_list = admin.WishList.by_id(int(l))
-            
+
             if not edit_list:
                 self.render('front.html', user=self.user,
                             text = "It appears that list doesn't exist")
-                
+
             orig_listname = str(edit_list.listname)
             EditList.edit_items = list(edit_list.items)
             render_row = list(edit_list.items)
             #to specify the length of the existing item list for rendering
             length = len(render_row)
             numrows = length + 5
+            EditList.rows = numrows
             params = dict(user = self.user,
                           header = 'Edit %s' % orig_listname,
                           numrows = numrows,
@@ -214,10 +206,10 @@ class EditList(admin.Handler):
             if 'create-list' in referer:
                 params['create_success'] = 'Successfully created %s for group %s.  If you like, you can make additional edits here.' % (edit_list.listname, edit_list.groupname)
 
-            self.render('list-form.html', **params)
+            self.render('edit-list.html', **params)
 
     def post(self):
-        numrows = 10
+        numrows = EditList.rows
         new_items = []
         render_row = []
         has_error = False
@@ -229,7 +221,7 @@ class EditList(admin.Handler):
                       listname = listname,
                       render_row = render_row,
                       length = len(render_row) + 5)
-        
+
         if not listname:
             params['error_listname'] = 'Please provide a list name.'
             has_error = True
@@ -242,7 +234,7 @@ class EditList(admin.Handler):
 
             link_req = 'link_%s' % row
             link = self.request.get(link_req)
-            
+
             note_req = 'note_%s' % row
             note = self.request.get(note_req)
 
@@ -254,20 +246,14 @@ class EditList(admin.Handler):
                     for e in EditList.edit_items:
                         if e['item'] == item:
                             EditList.edit_items.remove(e)
-                            
+
                 elif item in new_items:
                     render_row.append({'item': item,
                                        'link': link,
                                        'note': note,
                                        'error': 'You listed this item more than once.  Please delete this row or rename the item'})
                     has_error = True
-                    
-##                elif not valid_link(link) and link:
-##                    render_row.append({'item': item,
-##                                       'link': link,
-##                                       'note': note,
-##                                       'error': 'Please correct the url formatting (be sure to use http://...).'})
-##                    has_error = True
+
                 else:
                     render_row.append({'item': item,
                                        'link': link,
@@ -280,14 +266,17 @@ class EditList(admin.Handler):
                                    'error': 'Link or note must have a corresponding item.'})
                 has_error = True
 
-        
+        more = self.request.get('more_items')
         if has_error:
             params['render_row'] = render_row
             params['length'] = len(render_row)
-            self.render('list-form.html', **params)
-           
+            if more:
+                params['numrows'] = len(render_row) + 5
+            self.render('edit-list.html', **params)
+            return
+
         else:
-            
+
             params['render_row'] = render_row
             params['length'] = len(render_row)
             params['numrows'] = len(render_row) + 5
@@ -305,7 +294,7 @@ class EditList(admin.Handler):
                     new_items.append({'item': row['item'],
                                       'note': row['note'],
                                       'link': row['link']})
-                
+
             l = self.request.get('l')
             l_new = admin.WishList.by_id(int(l))
             l_new.listname = self.request.get('listname')
@@ -321,8 +310,8 @@ class EditList(admin.Handler):
                 #update group-lists cache
                 admin.WishList.by_group(l_new_group_id, update = True)
                 params['success'] = 'Successfully updated your list.'
-           
-            self.render('list-form.html', **params)
+
+            self.render('edit-list.html', **params)
 
 
 import re
@@ -361,7 +350,7 @@ def extract_list(items):
                                    'note': v['note'],
                                    'bought': v['bought']})
     return extracted_list
-        
+
 def edit_list(name, link, note, item_dict):
     new_dict = list(item_dict)
     for item in item_dict:
@@ -375,9 +364,7 @@ def edit_list(name, link, note, item_dict):
                               'link': link,
                               'note': note})
     return new_dict
-            
+
 def path_referrer(referrer):
     pos = referrer.find('?')
     return referrer[:pos]
-    
-    

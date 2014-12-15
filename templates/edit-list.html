@@ -20,35 +20,23 @@
   </div>
 </div>
 
+<form role="form" method="post">
 <div class="col-md-6 col-md-offset-3">
-
-    <form role="form" method="post">
-      <div class="form-group">
-        <label>List Name</label>
-        <input type="text" class="form-control" name="listname" value="{{listname}}" placeholder="list name">
-        <div class="error">{{error_listname}}</div>
-      </div>
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" name="other_person" {{checked}}>Make this list on behalf of another person
-        </label>
-        <div class="error">{{error_checkbox}}</div>
-      </div>
 
       {% for row in range(0, numrows) %}
         {% set rownum = row + 1 %}
         {% if render_row and row < length %} <!--"if there's an item to display"-->
 
         <div class="form-group panel-group">
-          <label>({{rownum}}) Item</label>
+          <label>Edit: {{render_row[row]['item']}} </label>
+          <input type="hidden" name="item_{{row}}" value="{{render_row[row]['item']}}">
           <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
-            Add Note
+            See Note
           </button>
           <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
-            Add Link
+            See Link
           </button>
           <div class="error">{{render_row[row]['error']}}</div>
-          <input type="text" class="form-control" name="item_{{row}}" value="{{render_row[row]['item']}}" placeholder="item {{rownum}}">
           {# if there's a note, don't collapse the div, otherwise keep it collapsed #}
           {% if render_row[row].get('note') %}
           <div id="note_{{row}}" class="collapse in">
@@ -57,7 +45,7 @@
           {% endif %}
             <div class="input-group">
               <div class="input-group-addon">note</div>
-              <input type="text" class="form-control" name="note_{{row}}" value="{{render_row[row]['note']}}" placeholder="note for item {{rownum}}">
+              <input type="text" class="form-control" name="note_{{row}}" value="{{render_row[row]['note']}}" placeholder="note for {{render_row[row]['item']}}">
             </div>
           </div>
           {# if there's a link, don't collapse the div, otherwise keep it collapsed #}
@@ -68,7 +56,7 @@
           {% endif %}
             <div class="input-group">
               <div class="input-group-addon">link</div>
-              <input type="text" class="form-control" name="link_{{row}}" value="{{render_row[row]['link']}}" placeholder="link to item {{rownum}}">
+              <input type="text" class="form-control" name="link_{{row}}" value="{{render_row[row]['link']}}" placeholder="link to {{render_row[row]['item']}}">
             </div>
           </div>
         </div>
@@ -76,14 +64,17 @@
         {% else %} <!--"if no item to display"-->
 
         <div class="form-group panel-group">
-          <label>({{rownum}}) Item</label>
+          <label>Add Item</label>
             <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
               Add Note
             </button>
             <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
               Add Link
             </button>
-          <input type="text" class="form-control" name="item_{{row}}" placeholder="item {{rownum}}">
+            <div class="input-group">
+              <div class="input-group-addon">item</div>
+              <input type="text" class="form-control" name="item_{{row}}" placeholder="item {{rownum}}">
+            </div>
           <div id="note_{{row}}" class="collapse">
             <div class="input-group">
               <div class="input-group-addon">note</div>
@@ -100,14 +91,13 @@
 
         {% endif %} <!-- /"if render_row and row < length"-->
       {% endfor %} <!-- /"for rown in range(0, numrows)"-->
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" name="more_items"> Add More Items
-      </label>
-    </div>
+
+    <input type="checkbox" name="more_items"> Add More Items
     <hr>
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Save</button>
     </form>
+    <hr>
+    <div class="success">{{success}}</div>
 
 </div>
 

@@ -2,39 +2,39 @@
 
 {% block content %}
 
-    <h2>Manage my Account</h2>
-<br><br>
-      <table>
-        <tr>
-          <td class="label">
-            <a href="/my-groups/create-group">Create a Group</a>
-          </td>
-        </tr>
-        <tr>
-          <td class="label">
-            <a href="/my-groups/join-group">Join a Group</a>
-          </td>
-        </tr>
 
-          {#
-        <tr>
-          <td class="label">
-            <a href="/leave-group">Leave a Group</a>
-          </td>
-        </tr>
-          #}
+<div class="row">
+  <div class="col-md-4 col-md-offset-4 page-box header-color">
+    <div class="row page-box-header">
+      <div class="col-md-12 text-right page-box-title">
+        Manage Account
+      </div>
+    </div>
+  </div>
+</div>
 
-        <tr>
-          <td class="label">
-            <a href="/account-management/change-email">Change Email</a>
-          </td>
-        </tr>
-
-        <tr>
-          <td class="label">
-            <a href="/account-management/change-password">Change Password</a>
-          </td>
-        </tr>
-      </table>
+<div class="row">
+  <div class="col-md-4 col-md-offset-4 page-box">
+    <hr>
+    <div class="row item-row">
+      <a href="/account-management/change-email">Change Email</a>
+    </div>
+    <div class="row item-row">
+      <a href="/account-management/change-password">Change Password</a>
+    </div>
+    <div class="row item-row">
+      <a href="/my-groups/create-group">Create a Group</a>
+    </div>
+    <div class="row item-row">
+      <a href="/my-groups/join-group">Join a Group</a>
+    </div>
+    {#
+    <div class="row item-row">
+      <a href="/leave-group">Leave a Group</a>
+    </div>
+    #}
+    <hr>
+  </div>
+</div>
 
 {% endblock %}

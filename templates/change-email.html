@@ -3,13 +3,21 @@
 {% block content %}
 
 <div class="row">
-  <div class="col-md-12 text-center">
-    <h2>Change Email</h2>
+  <div class="col-md-4 col-md-offset-4 page-box header-color">
+    <div class="row page-box-header">
+      <div class="col-md-6 text-left page-box-title">
+        List Tracker
+      </div>
+      <div class="col-md-6 text-right  page-box-title">
+        Change Email
+      </div>
+    </div>
   </div>
 </div>
 
 <div class="row">
-  <div class="col-md-4 col-md-offset-4">
+  <div class="col-md-4 col-md-offset-4 page-box">
+    <hr>
     <form role="form" method="post">
       <div class="form-group">
         <label>Current Email</label>
@@ -28,12 +36,13 @@
       </div>
       <div class="form-group">
         <label>Password</label>
-        <input type="password" class="form-control" name="email_password">
+        <input type="password" class="form-control" name="email_password" placeholder="password">
         <div class="error">{{email_pw_error}}</div>
       </div>
       <button type="submit" class="btn btn-primary">Change Email</button>
     </form>
     <div class="success">{{email_success}}</div>
+    <hr>
   </div>
 </div>
 

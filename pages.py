@@ -24,13 +24,17 @@ class ManageAccount(admin.Handler):
                         user = self.user)
 
 welcome_page = """
-<h2>Welcome to List Tracker</h2>
-<pre>Let's get started:
-
-You can join an existing group: <a href="/my-groups/join-group">Join a Group</a>
-
-Or you can create a new group: <a href="/my-groups/create-group">Create a Group</a>
-</pre>
+<div class="row">
+<div class="col-md-12 text-center">
+<h2>Welcome to List Tracker!</h2>
+</div>
+</div>
+<div class="row">
+<div class="col-md-6 col-md-offset-3">
+To get started, create a new group or join an existing group.  Then, make and share your list!
+</div>
+</div>
+<hr>
 """
 
 class Welcome(admin.Handler):
@@ -87,11 +91,11 @@ class GroupPage(admin.Handler):
             if not raw_group_lists:
                 params['no_list_msg'] = '%s currently has no lists.  Click the above link to create a list.' % g.groupname
                 if 'my-groups/create-group' in referer:
-                    params['create_success'] = "Successfully created group %s!  Click the link below to create a list, and don't forget to invite your friends!" % g.groupname
+                    params['create_success'] = "Successfully created group %s!  Now invite your friends!" % g.groupname
                 elif 'my-groups/join-group' in referer:
                     params['create_success'] = 'Successfully joined group %s!  Here, you can view the lists for this group, or create your own list by clicking the link below.' % g.groupname
                 self.render('group-page.html', **params)
-            elif len(raw_group_lists) == 1 and raw_group_lists[0].creator_id == self.user.key.id():
+            elif len(raw_group_lists) == 1 and raw_group_lists[0].creator_id == self.user.key.id() and raw_group_lists[0].for_other_person == False:
                 params['no_list_msg'] = '%s currently has no lists to display. Tell your friends to make a list!' % g.groupname
                 self.render('group-page.html', **params)
             else:

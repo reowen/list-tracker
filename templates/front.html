@@ -2,65 +2,67 @@
 
 {% block content %}
 
+{% if lists %}
 <div class="row">
-  <div class="col-md-4 col-md-offset-4">
-    <h2>{{user.firstname}} {{user.lastname}}</h2>
-  </div>
-</div>
-
-<div class="row front-box">
   <div class="col-md-8 col-md-offset-2">
-    <div class="row">
+    <div class="row page-box page-box-header">
       <div class="col-md-6">
-        <h3 class="text-center front-box-title">My Lists</h3>
+        <div class="text-center page-box-title">My Lists</div>
       </div>
-      <div class="col-md-6 text-left">
-        <a class="btn btn-primary btn-sm" href="/create-list">Create List</a>
+      <div class="col-md-6 text-right">
+        {#<a class="btn btn-default btn-sm" href="/create-list">Create List</a>#}
       </div>
     </div>
-    <hr>
-    {% if lists %}
-    {% for list in lists %}
-      <div class="row front-box-list">
-        <div class="col-md-6">
-          <div class="col-md-6">{{list.groupname}}</div>
-          <div class="col-md-6"> ({{list.listname}})</div>
+    <div class="page-box">
+      <hr>
+      {% for list in lists %}
+        <div class="row page-box-list">
+          <div class="col-md-6">
+            <div class="col-md-6">{{list.listname}}</div>
+            <div class="col-md-6"> ({{list.groupname}})</div>
+          </div>
+          <div class="col-md-2 front-list-item text-center">
+            <a class="btn btn-default btn-sm" href="/edit-list?l={{list.key.id()}}">Edit</a>
+          </div>
         </div>
-        <div class="col-md-2 front-list-item">
-          <a class="btn btn-info btn-xs" href="/edit-list?l={{list.key.id()}}">Edit</a>
-        </div>
-      </div>
-    {% endfor %}
-    {% endif %}
+      {% endfor %}
+    </div>
   </div>
 </div>
+{% endif %} <!--/"if lists"-->
 
 <div class="row">
   <hr>
 </div>
 
 <div class="row">
-  <div class="col-md-6 col-md-offset-3 text-center">
-    <div class="text-center">
-      <h3>My Groups</h3>
-      <a class="btn btn-primary" href="/my-groups/join-group">Join Group</a>
-      <a class="btn btn-primary" href="/my-groups/create-group">Create Group</a>
+  <div class="col-md-8 col-md-offset-2">
+    <div class="row page-box page-box-header">
+      <div class="col-md-6">
+        <div class="text-center page-box-title">My Groups</div>
+      </div>
+      <div class="col-md-6 text-right">
+        <a class="btn btn-default btn-sm" href="/my-groups/join-group">Join Group</a>
+        <a class="btn btn-default btn-sm" href="/my-groups/create-group">Create Group</a>
+      </div>
     </div>
-    <hr>
     {% if groups %}
+    <div class="page-box">
+      <hr>
       {% for group in groups %}
-        <div class="row front-box-list">
-          <div class="col-md-4">
-            {{group.groupname}}
-          </div>
-          <div class="col-md-3 front-list-item">
-            <a class="btn btn-info btn-xs" href="/groups?g={{group.group}}">See Group</a>
-          </div>
-          <div class="col-md-3 front-list-item">
-            <a class="btn btn-info btn-xs" href="/create-list?g={{group.group}}">Make a List</a>
-          </div>
+      <div class="row page-box-list">
+        <div class="col-md-4">
+          {{group.groupname}}
         </div>
+        <div class="col-md-2 front-list-item">
+          <a class="btn btn-default btn-sm" href="/groups?g={{group.group}}">See Group</a>
+        </div>
+        <div class="col-md-2 front-list-item">
+          <a class="btn btn-default btn-sm" href="/create-list?g={{group.group}}">Make a List</a>
+        </div>
+      </div>
       {% endfor %}
+    </div>
     {% endif %}
   </div>
 </div>
