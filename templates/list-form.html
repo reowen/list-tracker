@@ -40,7 +40,7 @@
         {% if render_row and row < length %} <!--"if there's an item to display"-->
 
         <div class="form-group panel-group">
-          <label>Item {{rownum}}</label>
+          <label>({{rownum}}) Item</label>
           <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
             Add Note
           </button>
@@ -55,7 +55,10 @@
           {% else %}
           <div id="note_{{row}}" class="collapse">
           {% endif %}
-            <input type="text" class="form-control" name="note_{{row}}" value="{{render_row[row]['note']}}" placeholder="note for item {{rownum}}">
+            <div class="input-group">
+              <div class="input-group-addon">note</div>
+              <input type="text" class="form-control" name="note_{{row}}" value="{{render_row[row]['note']}}" placeholder="note for item {{rownum}}">
+            </div>
           </div>
           {# if there's a link, don't collapse the div, otherwise keep it collapsed #}
           {% if render_row[row].get('link') %}
@@ -63,14 +66,17 @@
           {% else %}
           <div id="link_{{row}}" class="collapse">
           {% endif %}
-            <input type="text" class="form-control" name="link_{{row}}" value="{{render_row[row]['link']}}" placeholder="link to item {{rownum}}">
+            <div class="input-group">
+              <div class="input-group-addon">link</div>
+              <input type="text" class="form-control" name="link_{{row}}" value="{{render_row[row]['link']}}" placeholder="link to item {{rownum}}">
+            </div>
           </div>
         </div>
 
         {% else %} <!--"if no item to display"-->
 
         <div class="form-group panel-group">
-          <label>Item {{rownum}}</label>
+          <label>({{rownum}}) Item</label>
             <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
               Add Note
             </button>
@@ -79,10 +85,16 @@
             </button>
           <input type="text" class="form-control" name="item_{{row}}" placeholder="item {{rownum}}">
           <div id="note_{{row}}" class="collapse">
-            <input type="text" class="form-control" name="note_{{row}}" placeholder="note for item {{rownum}}">
+            <div class="input-group">
+              <div class="input-group-addon">note</div>
+              <input type="text" class="form-control" name="note_{{row}}" placeholder="note for item {{rownum}}">
+            </div>
           </div>
           <div id="link_{{row}}" class="collapse">
-            <input type="text" class="form-control" name="link_{{row}}" placeholder="link to item {{rownum}}">
+            <div class="input-group">
+              <div class="input-group-addon">link</div>
+              <input type="text" class="form-control" name="link_{{row}}" placeholder="link to item {{rownum}}">
+            </div>
           </div>
         </div>
 
