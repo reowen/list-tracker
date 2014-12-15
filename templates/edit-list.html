@@ -31,8 +31,8 @@
       <div class="form-group">
         <label>List Name</label>
         <input type="text" class="form-control" name="listname" value="{{listname}}">
-        <div class="error">{{error_listname}}</div>
       </div>
+      <div class="error">{{error_listname}}</div>
     </div>
   </div>
   <hr>
@@ -45,14 +45,21 @@
   {% for row in range(0, length) %}
 
     <div class="form-group panel-group">
-      <div class="col-md-6">
+      <div class="col-md-4">
         {% if render_row[row].get('error') %}
           <label class="error">Item Error</label>
         {% else %}
           <label>{{render_row[row]['item']}} </label>
         {% endif %}
       </div>
-      <div class="col-md-6 text-right">
+      <div class="col-md-4 text-right">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="del_{{row}}"> Delete
+          </label>
+        </div>
+      </div>
+      <div class="col-md-4 text-right">
         <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
           See Note
         </button>
@@ -61,7 +68,6 @@
         </button>
       </div>
       <hr>
-
       <div class="error">{{render_row[row]['error']}}</div>
 
       {% if render_row[row].get('error') %}
