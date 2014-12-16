@@ -27,7 +27,7 @@ class DeleteList(admin.Handler):
             self.redirect('/')
         else:
             list_id = self.request.get('l')
-            listname = self.request.get('n')
+            group_id = self.request.get('g')
             referer = self.request.headers.get('referer', '/')
             if not list_id or not listname:
                 self.redirect('/')
@@ -39,7 +39,7 @@ class DeleteList(admin.Handler):
     def post(self):
         delete = self.request.get('delete')
         list_id = self.request.get('l')
-        listname = self.request.get('n')
+        group_id = self.request.get('g')
         referer = self.request.headers.get('referer', '/')
 
         params = dict(user = self.user,
@@ -53,6 +53,8 @@ class DeleteList(admin.Handler):
         elif delete:
             l_key = admin.WishList.by_id(int(list_id))
             l_key.key.delete()
+            #update user-lists cache
+            #update group-lists cache
             params['delete'] = 'Successfully deleted %s' % listname
             self.render('manage-lists.html', **params)
 
