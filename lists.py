@@ -52,7 +52,7 @@ class DeleteList(admin.Handler):
             return
         elif delete:
             l_key = admin.WishList.by_id(int(list_id))
-            ndb.delete(l_key)
+            l_key.key.delete()
             params['delete'] = 'Successfully deleted %s' % listname
             self.render('manage-lists.html', **params)
 
