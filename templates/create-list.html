@@ -23,16 +23,21 @@
 <div class="col-md-6 col-md-offset-3">
 
     <form role="form" method="post">
-      <div class="form-group">
-        <label>List Name</label>
-        <input type="text" class="form-control" name="listname" value="{{listname}}" placeholder="list name">
-        <div class="error">{{error_listname}}</div>
+      <div class="row">
+        <div class="form-group">
+          <label>List Name</label>
+          <input type="text" class="form-control" name="listname" value="{{listname}}" placeholder="list name">
+          <div class="error">{{error_listname}}</div>
+        </div>
       </div>
-      <div class="checkbox">
-        <label>
-          <input type="checkbox" name="other_person" {{checked}}>Make this list on behalf of another person
-        </label>
-        <div class="error">{{error_checkbox}}</div>
+
+      <div class="row">
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="other_person" {{checked}}>Make this list on behalf of another person
+          </label>
+          <div class="error">{{error_checkbox}}</div>
+        </div>
       </div>
 
       {% for row in range(0, numrows) %}
@@ -75,15 +80,27 @@
 
         {% else %} <!--"if no item to display"-->
 
-        <div class="form-group panel-group">
-          <label>({{rownum}}) Item</label>
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
-              Add Note
-            </button>
-            <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
-              Add Link
-            </button>
-          <input type="text" class="form-control" name="item_{{row}}" placeholder="item {{rownum}}">
+        <div class="row">
+          <div class="form-group">
+            <div class="col-md-6 text-left">
+              <label>({{rownum}})</label>
+            </div>
+            <div class="col-md-6 text-right">
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
+                Add Note
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
+                Add Link
+              </button>
+            </div>
+          </div> <!--/form-group-->
+        </div> <!--/row-->
+
+        <div class="row">
+          <div class="input-group">
+            <div class="input-group-addon">item</div>
+            <input type="text" class="form-control" name="item_{{row}}" placeholder="item {{rownum}}">
+          </div>
           <div id="note_{{row}}" class="collapse">
             <div class="input-group">
               <div class="input-group-addon">note</div>
@@ -97,6 +114,8 @@
             </div>
           </div>
         </div>
+
+        <hr>
 
         {% endif %} <!-- /"if render_row and row < length"-->
       {% endfor %} <!-- /"for rown in range(0, numrows)"-->
