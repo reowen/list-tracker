@@ -2,6 +2,12 @@
 
 {% block content %}
 
+<script>
+$(function () {
+  $('[data-toggle="popover"]').popover()
+})
+</script>
+
 <div class="row">
   <div class="col-md-12 text-center">
     <div class="success">{{create_success}}</div>
@@ -36,7 +42,11 @@
           <label>
             <input type="checkbox" name="other_person" {{checked}}>Make this list on behalf of another person
           </label>
-          <div class="error">{{error_checkbox}}</div>
+          <a href="#" tabindex="0" class="btn btn-xs btn-default" role="button" data-toggle="popover" data-trigger="focus" data-content="Checking this box allows you to make a list on behalf of another
+          person.  For example, if you have a young child who does not have an email address, you can create a list for the child by checking this box.  Note that if you check this box, the list
+          will be associated with your email address, and only you will be able to modify it.  Checking this box also allows you to see which items in the list have already been bought, and by whom.">
+          ?</a>
+
         </div>
       </div>
 
