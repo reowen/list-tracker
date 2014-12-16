@@ -149,7 +149,13 @@ class CreateList(admin.Handler):
             note = self.request.get(note_req)
 
             if valid_item(item):
-                if link and valid_link(link):
+                if link and not valid_link(link):
+                    render_row.append({'item': item,
+                                       'link': link,
+                                       'note': note,
+                                       'error': 'Invalid link. Be sure to include http://..'})
+                    has_error = True
+                else:
                     items.append({'item': item,
                                   'link': link,
                                   'note': note})
@@ -157,13 +163,8 @@ class CreateList(admin.Handler):
                                        'link': link,
                                        'note': note,
                                        'error': ''})
-                elif link and not valid_link(link):
-                    render_row.append({'item': item,
-                                       'link': link,
-                                       'note': note,
-                                       'error': 'Invalid link. Be sure to include http://..'})
-                    has_error = True
 
+            #if there's a link or note, but no corresponding item
             elif link or note:
                 render_row.append({'item': item,
                                    'link': link,
@@ -377,10 +378,14 @@ class EditList(admin.Handler):
 
 import re
 #item validation
-ITEM_RE = r"[a-zA-Z0-9]$"
+# ITEM_RE = r"[a-zA-Z0-9]$"
+# def valid_item(item):
+#     return item and bool(re.search(ITEM_RE, item))
 def valid_item(item):
-    return item and bool(re.search(ITEM_RE, item))
-##    return item and ITEM_RE.search(item)
+    if item.isspace():
+        return False
+    else:
+        return True
 
 
 #URL validation
