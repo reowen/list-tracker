@@ -195,7 +195,7 @@ class EditList(admin.Handler):
             length = len(render_row)
             numrows = length + 5
             params = dict(user = self.user,
-                          header = 'Edit %s' % orig_listname,
+                          header = orig_listname,
                           numrows = numrows,
                           edit = True,
                           listname = orig_listname,
@@ -214,7 +214,7 @@ class EditList(admin.Handler):
         has_error = False
         listname = self.request.get('listname')
         params = dict(user = self.user,
-                      header = 'Edit %s' % listname,
+                      header = listname,
                       numrows = numrows,
                       edit = True,
                       listname = listname,

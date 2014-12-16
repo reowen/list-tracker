@@ -9,156 +9,171 @@
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-12 text-center">
-    <h2>{{header}}</h2>
-  </div>
-</div>
+<div class="col-md-8 col-md-offset-2">
 
-<div class="row">
-  <div class="col-md-8 col-md-offset-2">
-    {{prompt | safe}}
-  </div>
-</div>
-
-<form role="form" method="post">
-<div class="col-md-6 col-md-offset-3">
-  <div class="row">
-    <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#list_name" aria-expanded="true" aria-controls="list_name">
-      Edit List Name
-    </button>
-    <div id="list_name" class="collapse">
-      <div class="form-group">
-        <label>List Name</label>
-        <input type="text" class="form-control" name="listname" value="{{listname}}">
+  <form role="form" method="post">
+    <div class="row page-box-header" style="background-color: white;">
+      <div class="col-md-6">
+        <div class="text-left page-box-h1" style="color: black;">{{header}}</div>
       </div>
-      <div class="error">{{error_listname}}</div>
+      <div class="col-md-6 text-right" style="padding-top: 7px;">
+        <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#list_name" aria-expanded="true" aria-controls="list_name">
+          Edit List Name
+        </button>
+      </div>
+    </div> <!--/row-->
+
+    <div class="row">
+      <div id="list_name" class="collapse col-md-6 col-md-offset-3">
+        <div class="form-group">
+          <label>List Name</label>
+          <input type="text" class="form-control" name="listname" value="{{listname}}">
+        </div>
+        <div class="error">{{error_listname}}</div>
+      </div>
     </div>
-  </div>
-  <hr>
+    <hr>
+    <div class="col-md-10 col-md-offset-1">
+      <div class="row page-box page-box-header">
+        <div class="col-md-6">
+          <h3 class="text-center page-box-title">Edit Items</h3>
+        </div>
+      </div> <!--/row page-box page-box-header-->
+      <hr>
 
-  <div class="row text-center">
-    <h3>Edit Items</h3>
-  </div>
-  <hr>
+      {% for row in range(0, length) %}
 
-  {% for row in range(0, length) %}
+        <div class="row">
+          <div class="form-group">
+            <div class="col-md-4 text-center">
+              {% if render_row[row].get('error') %}
+              <label class="error">Item Error</label>
+              {% else %}
+              <label>{{render_row[row]['item']}} </label>
+              {% endif %}
+            </div>
+            <div class="col-md-4 text-right">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="del_{{row}}"> Delete
+                </label>
+              </div>
+            </div>
+            <div class="col-md-4 text-right">
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
+                See Note
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
+                See Link
+              </button>
+            </div>
+          </div> <!--/form-group-->
+        </div> <!--/row-->
 
-    <div class="form-group panel-group">
-      <div class="col-md-4">
-        {% if render_row[row].get('error') %}
-          <label class="error">Item Error</label>
-        {% else %}
-          <label>{{render_row[row]['item']}} </label>
-        {% endif %}
-      </div>
-      <div class="col-md-4 text-right">
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" name="del_{{row}}"> Delete
-          </label>
+        <div class="row">
+          <div class="error text-left">{{render_row[row]['error']}}</div>
+        </div>
+
+        <div class="row">
+          {% if render_row[row].get('error') %}
+            <div class="input-group">
+              <div class="input-group-addon">item</div>
+              <input type="text" class="form-control" name="item_{{row}}" placeholder="item {{rownum}}">
+            </div>
+          {% else %}
+            <input type="hidden" name="item_{{row}}" value="{{render_row[row]['item']}}">
+          {% endif %}
+        </div>
+
+        <div class="row">
+          {# if there's a note, don't collapse the div, otherwise keep it collapsed #}
+          {% if render_row[row].get('note') %}
+          <div id="note_{{row}}" class="collapse in">
+          {% else %}
+          <div id="note_{{row}}" class="collapse">
+          {% endif %}
+            <div class="input-group">
+              <div class="input-group-addon">note</div>
+              <input type="text" class="form-control" name="note_{{row}}" value="{{render_row[row]['note']}}" placeholder="note for {{render_row[row]['item']}}">
+            </div>
+          </div> <!--/note_{{row}}-->
+        </div> <!--/row-->
+
+        <div class="row">
+          {# if there's a link, don't collapse the div, otherwise keep it collapsed #}
+          {% if render_row[row].get('link') %}
+          <div id="link_{{row}}" class="collapse in">
+          {% else %}
+          <div id="link_{{row}}" class="collapse">
+          {% endif %}
+            <div class="input-group">
+              <div class="input-group-addon">link</div>
+              <input type="text" class="form-control" name="link_{{row}}" value="{{render_row[row]['link']}}" placeholder="link to {{render_row[row]['item']}}">
+            </div>
+          </div> <!--/link_{{row}}-->
+        </div> <!--/row-->
+        <hr>
+      {% endfor %} <!--/"for row in range(0, length)"-->
+
+      <hr>
+      <div class="row page-box page-box-header">
+        <div class="col-md-6">
+          <h3 class="text-center page-box-title">Add Items</h3>
+        </div>
+      </div> <!--/row page-box page-box-header-->
+
+      <hr>
+
+      {% for row in range(length, numrows) %}
+      {% set rownum = row + 1 %}
+
+      <div class="row">
+        <div class="col-md-6 text-center">
+          {#<label>Add Item</label>#}
+        </div>
+        <div class="col-md-6 text-right">
+          <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
+            Add Note
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
+            Add Link
+          </button>
         </div>
       </div>
-      <div class="col-md-4 text-right">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
-          See Note
-        </button>
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
-          See Link
-        </button>
-      </div>
-      <hr><br>
-      <div class="error text-left">{{render_row[row]['error']}}</div>
 
-      {% if render_row[row].get('error') %}
+      <div class="row">
         <div class="input-group">
           <div class="input-group-addon">item</div>
           <input type="text" class="form-control" name="item_{{row}}" placeholder="item {{rownum}}">
         </div>
-      {% else %}
-        <input type="hidden" name="item_{{row}}" value="{{render_row[row]['item']}}">
-        <br>
-      {% endif %}
-
-
-      {# if there's a note, don't collapse the div, otherwise keep it collapsed #}
-      {% if render_row[row].get('note') %}
-      <div id="note_{{row}}" class="collapse in">
-      {% else %}
-      <div id="note_{{row}}" class="collapse">
-      {% endif %}
-        <div class="input-group">
-          <div class="input-group-addon">note</div>
-          <input type="text" class="form-control" name="note_{{row}}" value="{{render_row[row]['note']}}" placeholder="note for {{render_row[row]['item']}}">
+        <div id="note_{{row}}" class="collapse">
+          <div class="input-group">
+            <div class="input-group-addon">note</div>
+            <input type="text" class="form-control" name="note_{{row}}" placeholder="note for item {{rownum}}">
+          </div>
+        </div>
+        <div id="link_{{row}}" class="collapse">
+          <div class="input-group">
+            <div class="input-group-addon">link</div>
+            <input type="text" class="form-control" name="link_{{row}}" placeholder="link to item {{rownum}}">
+          </div>
         </div>
       </div>
-      {# if there's a link, don't collapse the div, otherwise keep it collapsed #}
-      {% if render_row[row].get('link') %}
-      <div id="link_{{row}}" class="collapse in">
-      {% else %}
-      <div id="link_{{row}}" class="collapse">
-      {% endif %}
-      <div class="input-group">
-        <div class="input-group-addon">link</div>
-        <input type="text" class="form-control" name="link_{{row}}" value="{{render_row[row]['link']}}" placeholder="link to {{render_row[row]['item']}}">
-      </div>
-      </div>
-    </div>
+      <hr>
 
-  {% endfor %} <!--/"for row in range(0, length)"-->
 
-  <hr>
-  <div class="row text-center">
-    <h3>Add Items</h3>
-  </div>
-  <hr>
+      {% endfor %} <!--/"for row in range(length, numrows)"-->
 
-  {% for row in range(length, numrows) %}
-  {% set rownum = row + 1 %}
+    <hr>
 
-  <div class="form-group panel-group">
-    <div class="col-md-6">
-      <label>Add Item</label>
-    </div>
-    <div class="col-md-6 text-right">
-      <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
-        Add Note
-      </button>
-      <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
-        Add Link
-      </button>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" name="more_items"> Add More Items
+      </label>
     </div>
     <hr>
-    <div class="input-group">
-      <div class="input-group-addon">item</div>
-      <input type="text" class="form-control" name="item_{{row}}" placeholder="item {{rownum}}">
-    </div>
-    <div id="note_{{row}}" class="collapse">
-      <div class="input-group">
-        <div class="input-group-addon">note</div>
-        <input type="text" class="form-control" name="note_{{row}}" placeholder="note for item {{rownum}}">
-      </div>
-    </div>
-    <div id="link_{{row}}" class="collapse">
-      <div class="input-group">
-        <div class="input-group-addon">link</div>
-        <input type="text" class="form-control" name="link_{{row}}" placeholder="link to item {{rownum}}">
-      </div>
-    </div>
-  </div>
-
-  {% endfor %} <!--/"for row in range(length, numrows)"-->
-
-  <div class="checkbox">
-    <label>
-      <input type="checkbox" name="more_items"> Add More Items
-    </label>
-  </div>
-  <hr>
-  <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary">Save</button>
   </form>
-  <hr>
 
 </div>
-
 {% endblock %}
