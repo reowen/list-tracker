@@ -47,7 +47,7 @@
           <div class="form-group">
             <div class="col-md-4 text-center">
               {% if render_row[row].get('error') %}
-              <label class="error">Item Error</label>
+              <label class="error">Item Error: {{render_row[row]['item']}}</label>
               {% else %}
               <label>{{render_row[row]['item']}} </label>
               {% endif %}
@@ -75,13 +75,13 @@
         </div>
 
         <div class="row">
-          {% if render_row[row].get('error') %}
+          {% if render_row[row].get('item') %}
+            <input type="hidden" name="item_{{row}}" value="{{render_row[row]['item']}}">
+          {% else %}
             <div class="input-group">
               <div class="input-group-addon">item</div>
               <input type="text" class="form-control" name="item_{{row}}" placeholder="item {{rownum}}">
             </div>
-          {% else %}
-            <input type="hidden" name="item_{{row}}" value="{{render_row[row]['item']}}">
           {% endif %}
         </div>
 

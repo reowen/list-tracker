@@ -101,13 +101,21 @@ class CreateList(admin.Handler):
             note = self.request.get(note_req)
 
             if valid_item(item):
-                items.append({'item': item,
-                              'link': link,
-                              'note': note})
-                render_row.append({'item': item,
-                                   'link': link,
-                                   'note': note,
-                                   'error': ''})
+                if link and valid_link(link):
+                    items.append({'item': item,
+                                  'link': link,
+                                  'note': note})
+                    render_row.append({'item': item,
+                                       'link': link,
+                                       'note': note,
+                                       'error': ''})
+                elif link and not valid_link(link):
+                    render_row.append({'item': item,
+                                       'link': link,
+                                       'note': note,
+                                       'error': 'Invalid link. Be sure to include http://..'})
+                    has_error = True
+
             elif link or note:
                 render_row.append({'item': item,
                                    'link': link,
@@ -246,11 +254,11 @@ class EditList(admin.Handler):
                         if e['item'] == item:
                             EditList.edit_items.remove(e)
 
-                elif item in new_items:
+                elif link and not valid_link(link):
                     render_row.append({'item': item,
                                        'link': link,
                                        'note': note,
-                                       'error': 'You listed this item more than once.  Please delete this row or rename the item'})
+                                       'error': 'Invalid link.  Be sure to include http://...'})
                     has_error = True
 
                 else:
@@ -327,12 +335,13 @@ def valid_item(item):
 
 
 #URL validation
-URL_RE = re.compile(#r'^(?:http|ftp)s?://' # http:// or https://
+URL_RE = re.compile(r'^(?:http|ftp)s?://' # http:// or https://
                     r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
                     r'localhost|' #localhost...
                     r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
                     r'(?::\d+)?' # optional port
                     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
 def valid_link(link):
     return link and URL_RE.match(link)
 
