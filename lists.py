@@ -1,6 +1,7 @@
 import webapp2
 import jinja2
 import admin
+from google.appengine.ext import ndb
 
 import json
 import time
@@ -18,6 +19,42 @@ class ManageList(admin.Handler):
             else:
                 params['nolist'] = 'You have no lists to display'
                 self.render('manage-lists.html', **params)
+
+
+class DeleteList(admin.Handler):
+    def get(self):
+        if not self.user:
+            self.redirect('/')
+        else:
+            list_id = self.request.get('l')
+            listname = self.request.get('n')
+            referer = self.request.headers.get('referer', '/')
+            if not list_id or not listname:
+                self.redirect('/')
+
+            params = dict(user = self.user,
+                          list_id = list_id,
+                          referer = referer)
+            self.render('delete-list.html', **params)
+    def post(self):
+        delete = self.request.get('delete')
+        list_id = self.request.get('l')
+        listname = self.request.get('n')
+        referer = self.request.headers.get('referer', '/')
+
+        params = dict(user = self.user,
+                      list_id = list_id,
+                      referer = referer)
+
+        if not list_id:
+            params['error'] = 'There was an error processing your request. Return to the home page and try again.'
+            self.render('delete-list.html', **params)
+            return
+        elif delete:
+            l_key = admin.WishList.by_id(int(list_id))
+            ndb.delete(l_key)
+            params['delete'] = 'Successfully deleted %s' % listname
+            self.render('manage-lists.html', **params)
 
 
 

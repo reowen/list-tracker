@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-4 col-md-offset-4 page-box header-color">
+    <div class="row page-box-header page-box-title text-right">
+      Delete List
+    </div>
+  </div>
+</div>
+
+{% if error %}
+<div class="row">
+  <div class="col-md-4 col-md-offset-4 page-box header-color">
+    <div class="error row page-box-header page-box-title text-right">
+      {{error}}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="row">
+  <div class="col-md-4 col-md-offset-4 page-box">
+    <hr>
+    <form role="form" method="post">
+      <div class="note-on-item">
+        Are you sure you want to delete {{listname}}?  This action is permanent and cannot be undone.
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="delete"> Yes, I would like to delete {{listname}}
+        </label>
+      </div>
+      <a class="btn btn-primary" href="{{referer}}">Take me Back!</a>
+      <button type="submit" class="btn btn-danger">Delete {{listname}}</button>
+    </form>
+    <br>
+    <hr>
+  </div>
+</div>
+
+
+
+{% endblock %}
