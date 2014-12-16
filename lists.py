@@ -23,12 +23,13 @@ class ManageList(admin.Handler):
 
 class DeleteList(admin.Handler):
     listname = ''
+    referer = '/'
     def get(self):
         if not self.user:
             self.redirect('/')
         else:
             list_id = self.request.get('l')
-            referer = self.request.headers.get('referer', '/')
+            DeleteList.referer = self.request.headers.get('referer', '/')
             if not list_id:
                 self.redirect('/')
             l = admin.WishList.by_id(int(list_id))
@@ -37,16 +38,15 @@ class DeleteList(admin.Handler):
             params = dict(user = self.user,
                           list_id = list_id,
                           listname = DeleteList.listname,
-                          referer = referer)
+                          referer = DeleteList.referer)
             self.render('delete-list.html', **params)
     def post(self):
         delete = self.request.get('delete')
         list_id = self.request.get('l')
-        referer = self.request.headers.get('referer', '/')
 
         params = dict(user = self.user,
                       list_id = list_id,
-                      referer = referer)
+                      referer = DeleteList.referer)
 
         if not list_id:
             params['error'] = 'There was an error processing your request. Return to the home page and try again.'
@@ -66,6 +66,12 @@ class DeleteList(admin.Handler):
             #render confirmation page
             params['delete'] = 'Successfully deleted %s' % DeleteList.listname
             self.render('manage-lists.html', **params)
+        else:
+            params = dict(user = self.user,
+                          list_id = list_id,
+                          listname = DeleteList.listname,
+                          referer = DeleteList.referer)
+            self.render('delete-list.html', **params)
 
 
 

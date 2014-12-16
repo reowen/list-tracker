@@ -16,11 +16,13 @@
       <div class="col-md-6">
         <div class="text-left page-box-h1" style="color: black;">{{header}}</div>
       </div>
-      <div class="col-md-6 text-right" style="padding-top: 7px;">
+      <div class="col-md-4 text-right" style="padding-top: 7px;">
         <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#list_name" aria-expanded="true" aria-controls="list_name">
           Edit List Name
         </button>
-        <a class="btn btn-danger btn-sm" href="/delete-list?l={{list_id}}">Delete List</a>
+      </div>
+      <div class="col-md-2 text-right" style="padding-top: 7px;">
+        <a class="btn btn-danger" href="/delete-list?l={{list_id}}">Delete List</a>
       </div>
     </div> <!--/row-->
 

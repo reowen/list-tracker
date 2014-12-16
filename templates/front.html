@@ -10,7 +10,7 @@
         <div class="text-center page-box-title">My Lists</div>
       </div>
       <div class="col-md-6 text-right">
-        {#<a class="btn btn-default btn-sm" href="/create-list">Create List</a>#}
+        <a class="btn btn-default btn-sm" href="/manage-list">Manage Lists</a>
       </div>
     </div>
     <div class="page-box">
@@ -23,7 +23,6 @@
           </div>
           <div class="col-md-4 front-list-item text-center">
             <a class="btn btn-default btn-sm" href="/edit-list?l={{list.key.id()}}">Edit</a>
-            <a class="btn btn-danger btn-sm" href="/delete-list?l={{list.key.id()}}&g={{list.group}}">Delete</a>
           </div>
         </div>
       {% endfor %}
