@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="note-on-item">Select the list you wish to edit from the choices below.</div>
+  </div>
+</div>
+
+<hr>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="row page-box page-box-header">
+      <div class="col-md-6">
+        <div class="text-center page-box-title">My Lists</div>
+      </div>
+      <div class="col-md-6 text-right">
+        {#<a class="btn btn-default btn-sm" href="/create-list">Create List</a>#}
+      </div>
+    </div>
+    <div class="page-box">
+      <hr>
+      {% for list in lists %}
+      <div class="row page-box-list">
+        <div class="col-md-6">
+          <div class="col-md-6">{{list.listname}}</div>
+          <div class="col-md-6"> ({{list.groupname}})</div>
+        </div>
+        <div class="col-md-2 front-list-item text-center">
+          <a class="btn btn-default btn-sm" href="/edit-list?l={{list.key.id()}}">Edit</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}
