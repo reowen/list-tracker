@@ -22,24 +22,28 @@
   </div>
 </div>
 
-<div class="col-md-8 col-md-offset-2">
+<div class="col-md-6 col-md-offset-3">
   {% for row in confirm_list %}
+    {% if row['item'] %}
       <div class="row item-row">
-        <div class="col-md-8">
-          <div>{{row['item']}}</div>
-          {% if row.get('note') %}
-          <div class="note-on-item"> - {{row['note']}}</div>
-          {% endif %}
-        </div>
-        <div class="col-md-2">
-          {% if row.get('link') %}
-          <a class="btn btn-default btn-sm" href="{{row['link']}}" target="_blank">Link to Item</a>
-          {% else %}
-          <div> </div>
-          {% endif %}
-        </div>
+        <li>
+          <div class="col-md-6">
+            <div>{{row['item']}}</div>
+            {% if row.get('note') %}
+            <div class="note-on-item"> - {{row['note']}}</div>
+            {% endif %}
+          </div>
+          <div class="col-md-6 text-left">
+            {% if row.get('link') %}
+            <a class="btn btn-default btn-sm" href="{{row['link']}}" target="_blank">Link to item</a>
+            {% else %}
+            <div> </div>
+            {% endif %}
+          </div>
+        </li>
       </div>
       <hr>
+    {% endif %}
   {% endfor %} {# /"for row in confirm_list" #}
 </div>
 
