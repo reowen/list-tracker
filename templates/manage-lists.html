@@ -38,8 +38,9 @@
           <div class="col-md-6">{{list.listname}}</div>
           <div class="col-md-6"> ({{list.groupname}})</div>
         </div>
-        <div class="col-md-2 front-list-item text-center">
+        <div class="col-md-4 front-list-item text-center">
           <a class="btn btn-default btn-sm" href="/edit-list?l={{list.key.id()}}">Edit</a>
+          <a class="btn btn-danger btn-sm" href="/delete-list?l={{list.key.id()}}">Delete List</a>
         </div>
       </div>
       {% endfor %}
