@@ -44,16 +44,31 @@
         {% set rownum = row + 1 %}
         {% if render_row and row < length %} <!--"if there's an item to display"-->
 
-        <div class="form-group panel-group">
-          <label>({{rownum}}) Item</label>
-          <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
-            Add Note
-          </button>
-          <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
-            Add Link
-          </button>
+        <div class="row">
+          <div class="form-group">
+            <div class="col-md-6 text-left">
+              <label>({{rownum}})</label>
+            </div>
+            <div class="col-md-6 text-right">
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#note_{{row}}" aria-expanded="true" aria-controls="note_{{row}}">
+                Add Note
+              </button>
+              <button type="button" class="btn btn-primary btn-sm" data-toggle="collapse" data-target="#link_{{row}}" aria-expanded="true" aria-controls="link_{{row}}">
+                Add Link
+              </button>
+            </div>
+          </div> <!--/form-group-->
+        </div> <!--/row-->
+
+        <div class="row">
           <div class="error">{{render_row[row]['error']}}</div>
-          <input type="text" class="form-control" name="item_{{row}}" value="{{render_row[row]['item']}}" placeholder="item {{rownum}}">
+        </div>
+
+        <div class="row">
+          <div class="input-group">
+            <div class="input-group-addon">item</div>
+            <input type="text" class="form-control" name="item_{{row}}" value="{{render_row[row]['item']}}" placeholder="item {{rownum}}">
+          </div>
           {# if there's a note, don't collapse the div, otherwise keep it collapsed #}
           {% if render_row[row].get('note') %}
           <div id="note_{{row}}" class="collapse in">
@@ -76,7 +91,8 @@
               <input type="text" class="form-control" name="link_{{row}}" value="{{render_row[row]['link']}}" placeholder="link to item {{rownum}}">
             </div>
           </div>
-        </div>
+        </div> <!--/row-->
+        <hr>
 
         {% else %} <!--"if no item to display"-->
 

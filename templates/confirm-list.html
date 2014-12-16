@@ -3,12 +3,15 @@
 {% block content %}
 
 <div class="row" style="margin-bottom: 5px;">
-  <div class="col-md-6 text-center">
+  <div class="col-md-8 col-md-offset-2 text-center">
     <h2 style="margin: 0;">{{create_success}}</h2>
   </div>
-  <div class="col-md-6 text-center">
-    <a class="btn btn-default" href="/edit-list?l={{list_id}}">Edit List</a>
-    <a class="btn btn-default" href="/groups?g={{group_id}}">Go to Group</a>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 text-center">
+    <a class="btn btn-primary" href="/edit-list?l={{list_id}}">Edit List</a>
+    <a class="btn btn-primary" href="/groups?g={{group_id}}">Go to Group</a>
   </div>
 </div>
 
@@ -36,7 +39,7 @@
         </div>
       </div>
       <hr>
-  {% endfor %} <! close "for row in confirm_list">
+  {% endfor %} {# /"for row in confirm_list" #}
 </div>
 
 
