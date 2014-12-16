@@ -28,9 +28,8 @@ class DeleteList(admin.Handler):
             self.redirect('/')
         else:
             list_id = self.request.get('l')
-            group_id = self.request.get('g')
             referer = self.request.headers.get('referer', '/')
-            if not list_id or not group_id:
+            if not list_id:
                 self.redirect('/')
             l = admin.WishList.by_id(int(list_id))
             DeleteList.listname = l.listname
@@ -43,7 +42,6 @@ class DeleteList(admin.Handler):
     def post(self):
         delete = self.request.get('delete')
         list_id = self.request.get('l')
-        group_id = self.request.get('g')
         referer = self.request.headers.get('referer', '/')
 
         params = dict(user = self.user,
@@ -57,6 +55,7 @@ class DeleteList(admin.Handler):
         elif delete:
             l_key = admin.WishList.by_id(int(list_id))
             DeleteList.listname = l_key.listname
+            group_id = l_key.group
             l_key.key.delete()
             time.sleep(0.1)
             #update user-lists cache
@@ -257,7 +256,8 @@ class EditList(admin.Handler):
                           edit = True,
                           listname = orig_listname,
                           render_row = render_row,
-                          length = length)
+                          length = length,
+                          list_id = l)
             if 'create-list' in referer:
                 params['create_success'] = 'Successfully created %s for group %s.  If you like, you can make additional edits here.' % (edit_list.listname, edit_list.groupname)
 
