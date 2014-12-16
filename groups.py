@@ -8,7 +8,7 @@ import json
 """
 Managing Groups
 """
-           
+
 class CreateGroup(admin.Handler):
     def get(self):
         if self.user:
@@ -54,7 +54,9 @@ class CreateGroup(admin.Handler):
             if member:
                 member.put()
                 time.sleep(0.1)
+                #update group-members cache
                 admin.Group.get_members(str(g_key.id()), update = True)
+                #update user-groups cache
                 admin.User.get_groups(self.user.key.id(), update = True)
                 self.redirect('/groups?g=%s' % g_key.id())
 ##                self.render('create-group.html', user = self.user,
@@ -62,7 +64,7 @@ class CreateGroup(admin.Handler):
             else:
                 params['groupname_error'] = 'There was an error processing your request.'
                 self.render('create-group.html', **params)
-                            
+
 
 
 ##            if invite == 'now':
@@ -70,7 +72,7 @@ class CreateGroup(admin.Handler):
 ##            else:
 ##                self.redirect('/')
 
-           
+
 class JoinGroup(admin.Handler):
     def get(self):
         if self.user:
@@ -100,7 +102,7 @@ class JoinGroup(admin.Handler):
             else:
                 self.render('join.html', user = self.user,
                             error = 'You already belong to this group')
-            
+
 ##            user = admin.User.by_id(int(self.user_id))
 ##            members = g.members
 ##            members[self.user_id] = [user.firstname, user.lastname]
@@ -117,7 +119,7 @@ class InviteToGroup(admin.Handler):
                         text='Invite to group feature is under development')
         else:
             self.redirect('/')
-        
+
 class LeaveGroup(admin.Handler):
     def get(self):
         if self.user:
@@ -133,7 +135,7 @@ class FindGroup(admin.Handler):
                         text='Find Group feature is under development')
         else:
             self.redirect('/')
- 
+
 
 """
 Form validation procedures
@@ -203,6 +205,3 @@ def check_pw(name, pw, h):
     salt = h.split(',')[1]
     #then we pass the extracted salt through our make_pw_hash function
     return h == make_pw_hash(name, pw, salt)
-
-
-
