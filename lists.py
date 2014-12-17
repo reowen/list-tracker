@@ -304,7 +304,7 @@ class EditList(admin.Handler):
             del_req = 'del_%s' % row
             delete = self.request.get(del_req)
 
-            if item:
+            if item and valid_item(item):
                 if delete:
                     for e in EditList.edit_items:
                         if e['item'] == item:
