@@ -154,7 +154,7 @@ class CreateList(admin.Handler):
             note_req = 'note_%s' % row
             note = self.request.get(note_req)
 
-            if valid_item(item):
+            if item and valid_item(item):
                 if link and not valid_link(link):
                     render_row.append({'item': item,
                                        'link': link,
