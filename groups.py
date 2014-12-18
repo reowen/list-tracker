@@ -49,8 +49,12 @@ class CreateGroup(admin.Handler):
             creator = self.user.key.id()
             g = admin.Group.create(groupname, password, creator)
             g_key = g.put()
-            member = admin.Member.add(str(g_key.id()), creator,
-                                      groupname)
+            #add as a group member
+            group_id = str(g_key.id())
+            member_id = self.user.key.id()
+            creator = True
+            member = admin.Member.add(group_id, member_id,
+                                      groupname, creator)
             if member:
                 member.put()
                 time.sleep(0.1)

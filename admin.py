@@ -135,12 +135,12 @@ class Member(ndb.Model):
             membername = m.firstname
         if groupname and membername:
             return Member(parent = member_key(),
-                               member = member_id,
-                               membername = membername,
-                               group = group_id,
-                               groupname = groupname,
-                               creator = creator,
-                               admin = admin)
+                           member = member_id,
+                           membername = membername,
+                           group = group_id,
+                           groupname = groupname,
+                           creator = creator,
+                           admin = admin)
         else:
             return None
 

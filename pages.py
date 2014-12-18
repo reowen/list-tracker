@@ -64,7 +64,7 @@ class MyGroups(admin.Handler):
         else:
             groups = admin.User.get_groups(self.user.key.id())
             self.render('manage-groups.html', user = self.user,
-                        groups = groups, text = groups)
+                        groups = groups)
 
 
 class GroupPage(admin.Handler):
