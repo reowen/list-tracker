@@ -92,7 +92,7 @@ def member_key(name = 'default'):
 class Member(ndb.Model):
     #User-ID
     member = ndb.IntegerProperty(required = True)
-    #Member's FIRST name
+    #Member's first and last name
     membername = ndb.StringProperty(required = True)
     #Group-ID
     group = ndb.StringProperty(required = True)
@@ -132,7 +132,7 @@ class Member(ndb.Model):
             return None
         m = User.by_id(member_id)
         if m:
-            membername = m.firstname
+            membername = m.firstname + ' ' + m.lastname
         if groupname and membername:
             return Member(parent = member_key(),
                            member = member_id,

@@ -116,6 +116,14 @@ class JoinGroup(admin.Handler):
 ##            m.put()
 ##            self.redirect('/')
 
+class FindGroup(admin.Handler):
+    def get(self):
+        if self.user:
+            self.render('front.html', user = self.user,
+                        text='Find Group feature is under development')
+        else:
+            self.redirect('/')
+
 class InviteToGroup(admin.Handler):
     def get(self):
         if self.user:
@@ -194,14 +202,15 @@ class LeaveGroup(admin.Handler):
             refresh = self.request.path + '?g=%s' % group_id
             self.redirect(refresh)
 
-
-class FindGroup(admin.Handler):
+class RemoveMember(admin.Handler):
     def get(self):
-        if self.user:
-            self.render('front.html', user = self.user,
-                        text='Find Group feature is under development')
-        else:
+        if not self.user:
             self.redirect('/')
+        else:
+            group_id = self.request.get('g')
+            self.render('remove-member.html', user = self.user,
+                        success = 'Under development')
+
 
 
 """

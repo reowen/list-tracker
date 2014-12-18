@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row" style="margin-bottom: 5px;">
+  <div class="col-md-6 text-center">
+    <h2 style="margin: 0;">{{groupname}}</h2>
+  </div>
+  <div class="col-md-6 text-center">
+
+  </div>
+</div>
+
+{% if success %}
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="success">{{success}}</div>
+  </div>
+</div>
+{% endif %}
+
+<hr>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="note-on-item">
+      Select the members you wish to remove, and press submit.  This action is permanent and cannot be reversed.
+    </div>
+  </div>
+</div>
+
+<form role="form" method="post">
+  <div class="col-md-6 col-md-offset-3">
+    <button type="reset" class="btn btn-default">Reset</button>
+
+  {% for member in members %}
+    <div class="row">
+      <div class="col-md-6">
+        <li>{{member.membername}}</li>
+      </div>
+      <div class="col-md-6">
+        <label>
+          <input type="checkbox" name="remove_{{member.member}}"> Remove
+        </label>
+      </div>
+    </div>
+  {% endfor %}
+  <hr>
+  <a class="btn btn-primary" href="{{referer}}">Take me Back!</button>
+  <button type="submit" class="btn btn-danger">Remove Members</button>
+
+  </div>
+</form>
+
+
+
+{% endblock %}
