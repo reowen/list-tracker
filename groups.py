@@ -204,11 +204,14 @@ class LeaveGroup(admin.Handler):
 
 class RemoveMember(admin.Handler):
     members = ''
+    referer = '/'
+    groupname = ''
     def get(self):
         if not self.user:
             self.redirect('/')
         else:
             group_id = self.request.get('g')
+            RemoveMember.referer = self.request.headers.get('referer', '/')
             group = admin.Group.by_id(int(group_id))
             if not group:
                 self.redirect('/')
@@ -216,11 +219,13 @@ class RemoveMember(admin.Handler):
             if str(group.creator) != str(self.user.key.id()):
                 self.redirect('/')
                 return
+            RemoveMember.groupname = group.groupname
             RemoveMember.members = list(admin.Group.get_members(group_id))
             self.render('remove-member.html', user = self.user,
                         success = 'Under development',
+                        groupname = RemoveMember.groupname,
                         members = RemoveMember.members,
-                        text = str(group.creator) + '//' + str(self.user.key.id()))
+                        referer = RemoveMember.referer)
     def post(self):
         self.write('POST')
 
