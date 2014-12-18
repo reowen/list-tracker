@@ -125,12 +125,75 @@ class InviteToGroup(admin.Handler):
             self.redirect('/')
 
 class LeaveGroup(admin.Handler):
+    referer = '/'
     def get(self):
-        if self.user:
-            self.render('front.html', user = self.user,
-                        text='Leave group feature is under development')
-        else:
+        if not self.user:
             self.redirect('/')
+        else:
+            LeaveGroup.referer = self.request.headers.get('referer', '/')
+            params = dict(user = self.user,
+                          referer = LeaveGroup.referer)
+            group_id = int(self.request.get('g'))
+            if not group_id:
+                self.redirect('/')
+                return
+            group = admin.Group.by_id(group_id)
+            if not group:
+                params['error'] = 'There was an error processing your request. Return to the home page and try again.'
+                self.render('leave-group.html', **params)
+                return
+            params['group'] = group
+            self.render('leave-group.html', **params)
+
+    def post(self):
+        delete = self.request.get('delete')
+        group_id = int(self.request.get('g'))
+        params = dict(user = self.user,
+                      referer = LeaveGroup.referer)
+
+        if not group_id:
+            params['error'] = 'There was an error processing your request. Return to the home page and try again.'
+            self.render('leave-group.html', **params)
+            return
+
+        group = admin.Group.by_id(group_id)
+        if not group:
+            params['error'] = 'There was an error processing your request. Return to the home page and try again.'
+            self.render('leave-group.html', **params)
+            return
+
+        elif delete:
+            params['group'] = group
+            #delete from member list
+            member = admin.Member.by_entity(str(group_id), self.user.key.id())
+            if member:
+                member.key.delete()
+            else:
+                params['error'] = 'Could not find your group membership.'
+                self.render('leave-group.html', **params)
+                return
+            #delete user's lists for the group
+            grouplists = admin.WishList.by_user_group(self.user.key.id(), str(group_id))
+            if grouplists:
+                grouplists.key.delete()
+
+            time.sleep(0.1)
+            #update group-members cache
+            admin.Group.get_members(str(group_id), update = True)
+            #update user-lists cache
+            lists = admin.WishList.by_user(self.user.key.id(), update = True)
+            #update group-lists cache
+            admin.WishList.by_group(str(group_id), update = True)
+            #update user-groups cache
+            admin.User.get_groups(self.user.key.id(), update = True)
+
+            params['success'] = 'Successfully left %s' % group.groupname
+            self.render('leave-group.html', **params)
+            return
+        elif not delete:
+            refresh = self.request.path + '?g=%s' % group_id
+            self.redirect(refresh)
+
 
 class FindGroup(admin.Handler):
     def get(self):

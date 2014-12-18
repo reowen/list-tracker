@@ -313,6 +313,13 @@ class WishList(ndb.Model):
         return l
 
     @classmethod
+    def by_user_group(cls, user_id, group_id, ancestor_key = wishlist_key()):
+        lists = cls.query(cls.creator_id == user_id,
+                          cls.group == group_id,
+                          ancestor=ancestor_key).get()
+        return lists
+
+    @classmethod
     def save(cls, listname, user_id, firstname, group,
              groupname, items, for_other_person = False):
         return WishList(parent = wishlist_key(),

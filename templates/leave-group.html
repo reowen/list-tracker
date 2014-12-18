@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if success %}
+<div class="row">
+  <div class="col-md-4 col-md-offset-4 success">
+    {{success}}
+  </div>
+</div>
+{% endif %}
+
+<div class="row">
+  <div class="col-md-4 col-md-offset-4 page-box header-color">
+    <div class="row page-box-header page-box-title text-right">
+      Leave Group
+    </div>
+  </div>
+</div>
+
+{% if error %}
+<div class="row">
+  <div class="col-md-4 col-md-offset-4 page-box header-color">
+    <div class="error row page-box-header page-box-title text-right">
+      {{error}}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<div class="row">
+  <div class="col-md-4 col-md-offset-4 page-box">
+    <hr>
+    <form role="form" method="post">
+      <div class="note-on-item">
+        Are you sure you want to leave {{group.groupname}}?  Leaving the group will also delete any associated lists.  This action is permanent and cannot be undone.
+      </div>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="delete"> Yes, I would like to leave {{group.groupname}}
+        </label>
+      </div>
+      <div class="col-md-6 text-left">
+        <a class="btn btn-primary" href="{{referer}}">Take me Back!</a>
+      </div>
+      <div class="col-md-6 text-right">
+        <button type="submit" class="btn btn-danger">Leave Group</button>
+      </div>
+    </form>
+    <br>
+    <hr>
+  </div>
+</div>
+
+
+
+{% endblock %}

@@ -66,12 +66,10 @@ class DeleteList(admin.Handler):
             #render confirmation page
             params['delete'] = 'Successfully deleted %s' % DeleteList.listname
             self.render('manage-lists.html', **params)
+            return
         else:
-            params = dict(user = self.user,
-                          list_id = list_id,
-                          listname = DeleteList.listname,
-                          referer = DeleteList.referer)
-            self.render('delete-list.html', **params)
+            refresh = self.request.path + '?l=%s' % list_id
+            self.redirect(refresh)
 
 
 
