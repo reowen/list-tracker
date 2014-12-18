@@ -28,11 +28,11 @@
     </div>
   </div>
 </div>
-
+<hr>
 <form role="form" method="post">
   <div class="col-md-6 col-md-offset-3">
     <button type="reset" class="btn btn-default">Reset</button>
-
+    <hr>
   {% for member in members %}
     <div class="row">
       <div class="col-md-6">
@@ -46,7 +46,7 @@
     </div>
   {% endfor %}
   <hr>
-  <a class="btn btn-primary" href="{{referer}}">Take me Back!</button>
+  <a class="btn btn-primary" href="{{referer}}">Take me Back!</a>
   <button type="submit" class="btn btn-danger">Remove Members</button>
 
   </div>

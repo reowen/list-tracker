@@ -203,13 +203,26 @@ class LeaveGroup(admin.Handler):
             self.redirect(refresh)
 
 class RemoveMember(admin.Handler):
+    members = ''
     def get(self):
         if not self.user:
             self.redirect('/')
         else:
             group_id = self.request.get('g')
+            group = admin.Group.by_id(int(group_id))
+            if not group:
+                self.redirect('/')
+                return
+            if str(group.creator) != str(self.user.key.id()):
+                self.redirect('/')
+                return
+            RemoveMember.members = list(admin.Group.get_members(group_id))
             self.render('remove-member.html', user = self.user,
-                        success = 'Under development')
+                        success = 'Under development',
+                        members = RemoveMember.members,
+                        text = str(group.creator) + '//' + str(self.user.key.id()))
+    def post(self):
+        self.write('POST')
 
 
 
