@@ -59,11 +59,13 @@ class GroupMembers(admin.Handler):
 
 class MyGroups(admin.Handler):
     def get(self):
-        if self.user:
-            self.render('manage-my-groups.html', user = self.user,
-                        text = 'Manage My Groups under development')
-        else:
+        if not self.user:
             self.redirect('/')
+        else:
+            groups = admin.User.get_groups(self.user.key.id())
+            self.render('manage-groups.html', user = self.user,
+                        groups = groups, text = groups)
+
 
 class GroupPage(admin.Handler):
     #class variables to be used in both GET and POST

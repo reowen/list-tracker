@@ -17,7 +17,7 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
 App-Global Handlers
 """
 class Cookie():
-    #login just sets the user cookie     
+    #login just sets the user cookie
     def login(self, user):
         self.set_cookie('user', str(user.key.id()))
 
@@ -42,17 +42,17 @@ class Cookie():
 
     def clear_cookie(self, cookie_name):
         return self.response.delete_cookie(cookie_name)
-    
+
     def return_secure_cookie(self, cookie_name):
         cookie_str = self.request.cookies.get(cookie_name)
         if cookie_str:
             cookie_val = check_secure_val(cookie_str)
             return cookie_val
-        
+
     def read_secure_cookie(self, name):
         cookie_val = self.request.cookies.get(name)
         return cookie_val and check_secure_val(cookie_val)
-    
+
     def get_cookie_val(self, cookie):
         return cookie.split('|')[0]
 
@@ -63,8 +63,8 @@ class Cookie():
     def from_path(self):
         h = self.request.headers
         return h['Referer']
-    
-class Handler(webapp2.RequestHandler, Cookie):        
+
+class Handler(webapp2.RequestHandler, Cookie):
     def write(self, *a, **kw):
         self.response.out.write(*a, **kw)
 
@@ -74,7 +74,7 @@ class Handler(webapp2.RequestHandler, Cookie):
 
     def render(self, template, **kw):
         self.write(self.render_str(template, **kw))
-        
+
     def initialize(self, *a, **kw):
         webapp2.RequestHandler.initialize(self, *a, **kw)
         uid = self.read_secure_cookie('user')
@@ -97,8 +97,10 @@ class Member(ndb.Model):
     #Group-ID
     group = ndb.StringProperty(required = True)
     groupname = ndb.StringProperty(required = True)
+    creator = ndb.BooleanProperty(required = True)
+    admin = ndb.BooleanProperty(required = True)
     date_joined = ndb.DateTimeProperty(auto_now_add=True)
-    
+
     @classmethod
     #user_id is the string extracted from the cookie
     def by_member(cls, user_id, ancestor_key = member_key()):
@@ -122,7 +124,7 @@ class Member(ndb.Model):
         return e
 
     @classmethod
-    def add(cls, group_id, member_id, groupname):
+    def add(cls, group_id, member_id, groupname, creator = False, admin = False):
         groupcheck = Member.query(Member.member == member_id,
                                   Member.groupname == groupname,
                                   ancestor=member_key()).get()
@@ -136,7 +138,9 @@ class Member(ndb.Model):
                                member = member_id,
                                membername = membername,
                                group = group_id,
-                               groupname = groupname)
+                               groupname = groupname,
+                               creator = creator,
+                               admin = admin)
         else:
             return None
 
@@ -427,5 +431,3 @@ def check_pw(name, pw, h):
     salt = h.split(',')[1]
     #then we pass the extracted salt through our make_pw_hash function
     return h == make_pw_hash(name, pw, salt)
-
-
