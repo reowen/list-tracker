@@ -102,6 +102,10 @@ class Member(ndb.Model):
     date_joined = ndb.DateTimeProperty(auto_now_add=True)
 
     @classmethod
+    def by_id(cls, m_id):
+        return cls.get_by_id(m_id, parent = member_key())
+
+    @classmethod
     #user_id is the string extracted from the cookie
     def by_member(cls, user_id, ancestor_key = member_key()):
         m = cls.query(cls.member == user_id, ancestor = ancestor_key).order(-cls.date_joined).fetch(20)

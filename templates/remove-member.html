@@ -34,6 +34,7 @@
     <button type="reset" class="btn btn-default">Reset</button>
     <hr>
   {% for member in members %}
+    {% if member.member != user.key.id() %}
     <div class="row">
       <div class="col-md-6">
         <li>{{member.membername}}</li>
@@ -44,6 +45,7 @@
         </label>
       </div>
     </div>
+    {% endif %}
   {% endfor %}
   <hr>
   <a class="btn btn-primary" href="{{referer}}">Take me Back!</a>

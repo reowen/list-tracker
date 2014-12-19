@@ -213,17 +213,30 @@ class LeaveGroup(admin.Handler):
 class RemoveMember(admin.Handler):
     referer = '/'
     groupname = ''
+    editor = False
     def get(self):
         if not self.user:
             self.redirect('/')
         else:
             group_id = self.request.get('g')
             RemoveMember.referer = self.request.headers.get('referer', '/')
+            #must redirect if group doesn't exist
             group = admin.Group.by_id(int(group_id))
             if not group:
                 self.redirect('/')
                 return
-            if str(group.creator) != str(self.user.key.id()):
+
+            #only admins and creators can view this page
+            m = admin.Member.by_entity(group_id, self.user.key.id())
+            if not m:
+                self.redirect('/')
+                return
+            elif m.creator:
+                RemoveMember.editor = True
+            elif m.admin:
+                RemoveMember.editor = True
+
+            if not RemoveMember.editor:
                 self.redirect('/')
                 return
             RemoveMember.groupname = group.groupname
@@ -232,18 +245,45 @@ class RemoveMember(admin.Handler):
                         success = 'Under development',
                         groupname = RemoveMember.groupname,
                         members = members,
-                        referer = RemoveMember.referer,
-                        text = self.user.key.id())
+                        referer = RemoveMember.referer)
     def post(self):
         group_id = self.request.get('g')
+        if not group_id:
+            self.redirect('/')
+            return
         members = list(admin.Group.get_members(group_id))
+        #list of people removed
+        removed = []
         for member in members:
             remove_request = 'remove_%s' % member.member
             remove = self.request.get(remove_request)
             remove_me = 'poop'
             if remove:
-                remove_me = member.membername
-        self.render('front.html', user = self.user, text = remove_me)
+                removed.append(member.membername)
+                #remove member entry from datastore
+                member.key.delete()
+                #remove group references from member's lists
+                lists = admin.WishList.by_user_group(self.user.key.id(), group_id)
+                if lists:
+                    for l in lists:
+                        l.group = 'none'
+                        l.groupname = 'none'
+                        l.put()
+        time.sleep(0.1)
+        #update group-members cache
+        admin.Group.get_members(str(group_id), update = True)
+        #update group-lists cache
+        admin.WishList.by_group(str(group_id), update = True)
+        #update user-groups cache
+        admin.User.get_groups(self.user.key.id(), update = True)
+
+        if removed:
+            success = 'Removed the following members: %s' % str(removed)
+        else:
+            success = 'No members removed'
+
+        self.render('remove-member.html', user = self.user,
+                    success = success)
 
 
 
