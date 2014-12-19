@@ -342,6 +342,12 @@ class WishList(ndb.Model):
         return l
 
     @staticmethod
+    def remove_group(l):
+        l.group = '---groupless---'
+        l.groupname = '---groupless---'
+        return l
+
+    @staticmethod
     def set_user_lists_cache(user_id, lists):
         memcache.set('user_lists: %s' % user_id, lists)
 

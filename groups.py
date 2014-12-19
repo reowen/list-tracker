@@ -143,7 +143,24 @@ class DeleteGroup(admin.Handler):
             if not group_id:
                 self.redirect('/')
                 return
-            group = admin.Group.by_id(group_id)
+            group = admin.Group.by_id(int(group_id))
+            params = dict(user = self.user,
+                          group = group,
+                          referer = DeleteGroup.referer)
+            if not group:
+                params['error'] = 'There was an error processing your request. Return to the home page and try again.'
+                self.render('delete-group.html', **params)
+                return
+            self.render('delete-group.html', **params)
+    def post(self):
+        if not self.user:
+            self.redirect('/')
+        else:
+            group_id = self.request.get('g')
+            if not group_id:
+                self.redirect('/')
+                return
+            group = admin.Group.by_id(int(group_id))
             params = dict(user = self.user,
                           group = group,
                           referer = DeleteGroup.referer)
@@ -152,11 +169,36 @@ class DeleteGroup(admin.Handler):
                 self.render('delete-group.html', **params)
                 return
 
-
-            self.render('delete-group.html', **params)
-
-
-
+            delete = self.request.get('delete')
+            if not delete:
+                refresh = self.request.path + '?g=%s' % group_id
+                self.redirect(refresh)
+                return
+            else:
+                #delete group key
+                groupname = group.groupname
+                group.key.delete()
+                #delete members
+                members = list(admin.Group.get_members(group_id))
+                memberlist = []
+                for member in members:
+                    m_id = int(member.member)
+                    memberlist.append(m_id)
+                    member.key.delete()
+                    time.sleep(0.1)
+                    #update user-groups cache
+                    admin.User.get_groups(m_id, update = True)
+                #remove group references from lists
+                for m_id in memberlist:
+                    lists = list(admin.WishList.by_user_group(m_id, group_id))
+                    for l in lists:
+                        l_groupless = admin.WishList.remove_group(l)
+                        l_groupless.put()
+                    time.sleep(0.1)
+                    #update user-lists cache
+                    lists = admin.WishList.by_user(m_id, update = True)
+                params['success'] = 'Successfully deleted group: %s' % groupname
+                self.render('delete-group.html', **params)
 
 
 
@@ -299,9 +341,8 @@ class RemoveMember(admin.Handler):
                 lists = list(admin.WishList.by_user_group(m_id, group_id))
                 if lists:
                     for l in lists:
-                        l.group = '---groupless---'
-                        l.groupname = '---groupless---'
-                        l.put()
+                        l_groupless = admin.WishList.remove_group(l)
+                        l_groupless.put()
                     #update user-lists cache
                     lists = admin.WishList.by_user(m_id, update = True)
 
