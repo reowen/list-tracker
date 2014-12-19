@@ -241,17 +241,25 @@ class RemoveMember(admin.Handler):
                 return
             RemoveMember.groupname = group.groupname
             members = list(admin.Group.get_members(group_id))
+            #if you are the only member in the group
+            if len(members) == 1 and members[0].member == self.user.key.id():
+                members = None
+
             self.render('remove-member.html', user = self.user,
-                        success = 'Under development',
                         groupname = RemoveMember.groupname,
                         members = members,
-                        referer = RemoveMember.referer)
+                        referer = RemoveMember.referer,
+                        group_id = group_id)
     def post(self):
         group_id = self.request.get('g')
         if not group_id:
             self.redirect('/')
             return
         members = list(admin.Group.get_members(group_id))
+        if not members:
+            self.redirect('/manage-groups')
+            return
+        groupname = str(members[0].groupname)
         #list of people removed
         removed = []
         for member in members:
@@ -260,14 +268,19 @@ class RemoveMember(admin.Handler):
             remove_me = 'poop'
             if remove:
                 removed.append(member.membername)
+                #store user-id, so user-groups cache can be updated
+                m_id = int(member.member)
                 #remove member entry from datastore
                 member.key.delete()
+                time.sleep(0.1)
+                #update user-groups cache
+                admin.User.get_groups(m_id, update = True)
                 #remove group references from member's lists
                 lists = admin.WishList.by_user_group(self.user.key.id(), group_id)
                 if lists:
                     for l in lists:
-                        l.group = 'none'
-                        l.groupname = 'none'
+                        l.group = '---groupless---'
+                        l.groupname = '---groupless---'
                         l.put()
         time.sleep(0.1)
         #update group-members cache
@@ -278,12 +291,16 @@ class RemoveMember(admin.Handler):
         admin.User.get_groups(self.user.key.id(), update = True)
 
         if removed:
-            success = 'Removed the following members: %s' % str(removed)
+            success = 'Removed the following members:'
         else:
             success = 'No members removed'
+            removed = None
 
         self.render('remove-member.html', user = self.user,
-                    success = success)
+                    groupname = groupname,
+                    success = success,
+                    removed = removed,
+                    group_id = group_id)
 
 
 

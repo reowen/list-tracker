@@ -57,7 +57,7 @@ class GroupMembers(admin.Handler):
         text = members
         self.render('front.html', text = text)
 
-class MyGroups(admin.Handler):
+class ManageGroups(admin.Handler):
     def get(self):
         if not self.user:
             self.redirect('/')

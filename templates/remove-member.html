@@ -4,7 +4,7 @@
 
 <div class="row" style="margin-bottom: 5px;">
   <div class="col-md-6 text-center">
-    <h2 style="margin: 0;">{{groupname}}</h2>
+    <h2 style="margin: 0;">Remove Members: {{groupname}}</h2>
   </div>
   <div class="col-md-6 text-center">
 
@@ -12,15 +12,32 @@
 </div>
 
 {% if success %}
+<hr>
 <div class="row">
   <div class="col-md-6 col-md-offset-3 text-center">
     <div class="success">{{success}}</div>
   </div>
 </div>
-{% endif %}
+  {% if removed %}
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3 text-center">
+        {% for p in removed%}
+        <li>{{p}}</li>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+<hr>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 text-center">
+    <a class="btn btn-primary" href="/manage-groups">Take me Back</a>
+  </div>
+</div>
+{% endif %} {# end if success #}
 
 <hr>
 
+{% if members %}
 <div class="row">
   <div class="col-md-6 col-md-offset-3">
     <div class="note-on-item">
@@ -54,6 +71,26 @@
   </div>
 </form>
 
+{% elif success %}
+
+
+
+{% else %} {# if there are no members besides you #}
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3">
+    <div class="note-on-item">
+      You are the only member of this group.  To leave the group, <a href="/my-groups/leave-group?g={{group_id}}">follow this link</a>
+    </div>
+  </div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 text-center">
+    <a class="btn btn-primary" href="/manage-groups">Take me Back</a>
+  </div>
+</div>
+{% endif %}
 
 
 {% endblock %}
