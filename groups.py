@@ -133,12 +133,32 @@ class InviteToGroup(admin.Handler):
             self.redirect('/')
 
 class DeleteGroup(admin.Handler):
+    referer = '/'
     def get(self):
-        if self.user:
-            self.render('front.html', user = self.user,
-                        text='Delete Group feature is under development')
-        else:
+        if not self.user:
             self.redirect('/')
+        else:
+            DeleteGroup.referer = self.request.headers.get('referer', '/')
+            group_id = self.request.get('g')
+            if not group_id:
+                self.redirect('/')
+                return
+            group = admin.Group.by_id(group_id)
+            params = dict(user = self.user,
+                          group = group,
+                          referer = DeleteGroup.referer)
+            if not group:
+                params['error'] = 'There was an error processing your request. Return to the home page and try again.'
+                self.render('delete-group.html', **params)
+                return
+
+
+            self.render('delete-group.html', **params)
+
+
+
+
+
 
 class LeaveGroup(admin.Handler):
     referer = '/'
