@@ -22,17 +22,17 @@
           {{group.groupname}}
         </div>
         <div class="col-md-2 front-list-item">
-          <a class="btn btn-default btn-sm" href="/invite-to-group?g={{group.group}}">Invite a Friend</a>
+          <a class="btn btn-default btn-sm" href="/my-groups/invite-to-group?g={{group.group}}">Invite a Friend</a>
         </div>
         <div class="col-md-2 front-list-item">
-          <a class="btn btn-default btn-sm" href="/leave-group?g={{group.group}}">Leave Group</a>
+          <a class="btn btn-default btn-sm" href="/my-groups/leave-group?g={{group.group}}">Leave Group</a>
         </div>
         {% if group.creator or group.admin %}
           <div class="col-md-2 front-list-item">
-            <a class="btn btn-danger btn-sm" href="/remove-group-member?g={{group.group}}">Remove Member</a>
+            <a class="btn btn-danger btn-sm" href="/my-groups/remove-group-member?g={{group.group}}">Remove Member</a>
           </div>
           <div class="col-md-2 front-list-item">
-            <a class="btn btn-danger btn-sm" href="/delete-group?g={{group.group}}">Delete Group</a>
+            <a class="btn btn-danger btn-sm" href="/my-groups/delete-group?g={{group.group}}">Delete Group</a>
           </div>
         {% endif %}
       </div>
