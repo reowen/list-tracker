@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="row page-box page-box-header">
+      <div class="col-md-6">
+        <div class="text-center page-box-title">Manage my Groups</div>
+      </div>
+      <div class="col-md-6 text-right">
+        <a class="btn btn-default btn-sm" href="/my-groups/join-group">Join Group</a>
+        <a class="btn btn-default btn-sm" href="/my-groups/create-group">Create Group</a>
+      </div>
+    </div>
+    {% if groups %}
+    <div class="page-box">
+      <hr>
+      {% for group in groups %}
+      <div class="row page-box-list">
+        <div class="col-md-4">
+          {{group.groupname}}
+        </div>
+        <div class="col-md-2 front-list-item">
+          <a class="btn btn-default btn-sm" href="/invite-to-group?g={{group.group}}">Invite a Friend</a>
+        </div>
+        <div class="col-md-2 front-list-item">
+          <a class="btn btn-default btn-sm" href="/leave-group?g={{group.group}}">Leave Group</a>
+        </div>
+        {% if group.creator or group.admin %}
+          <div class="col-md-2 front-list-item">
+            <a class="btn btn-danger btn-sm" href="/remove-group-member?g={{group.group}}">Remove Member</a>
+          </div>
+          <div class="col-md-2 front-list-item">
+            <a class="btn btn-danger btn-sm" href="/delete-group?g={{group.group}}">Delete Group</a>
+          </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+
+{% endblock %}

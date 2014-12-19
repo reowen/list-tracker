@@ -132,6 +132,14 @@ class InviteToGroup(admin.Handler):
         else:
             self.redirect('/')
 
+class DeleteGroup(admin.Handler):
+    def get(self):
+        if self.user:
+            self.render('front.html', user = self.user,
+                        text='Delete Group feature is under development')
+        else:
+            self.redirect('/')
+
 class LeaveGroup(admin.Handler):
     referer = '/'
     def get(self):
