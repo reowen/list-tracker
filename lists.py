@@ -244,10 +244,13 @@ class EditList(admin.Handler):
             referer = self.request.headers.get('referer', '/')
             l = self.request.get('l')
             edit_list = admin.WishList.by_id(int(l))
-
+            #by default, list has a group
+            groupless = False
             if not edit_list:
                 self.render('front.html', user=self.user,
                             text = "It appears that list doesn't exist")
+            elif edit_list.groupname == '---groupless---':
+                groupless = True
 
             orig_listname = str(edit_list.listname)
             EditList.edit_items = list(edit_list.items)
@@ -262,7 +265,8 @@ class EditList(admin.Handler):
                           listname = orig_listname,
                           render_row = render_row,
                           length = length,
-                          list_id = l)
+                          list_id = l,
+                          groupless = groupless)
             if 'create-list' in referer:
                 params['create_success'] = 'Successfully created %s for group %s.  If you like, you can make additional edits here.' % (edit_list.listname, edit_list.groupname)
 

@@ -276,19 +276,20 @@ class RemoveMember(admin.Handler):
                 #update user-groups cache
                 admin.User.get_groups(m_id, update = True)
                 #remove group references from member's lists
-                lists = admin.WishList.by_user_group(self.user.key.id(), group_id)
+                lists = list(admin.WishList.by_user_group(m_id, group_id))
                 if lists:
                     for l in lists:
                         l.group = '---groupless---'
                         l.groupname = '---groupless---'
                         l.put()
+                    #update user-lists cache
+                    lists = admin.WishList.by_user(m_id, update = True)
+
         time.sleep(0.1)
         #update group-members cache
         admin.Group.get_members(str(group_id), update = True)
         #update group-lists cache
         admin.WishList.by_group(str(group_id), update = True)
-        #update user-groups cache
-        admin.User.get_groups(self.user.key.id(), update = True)
 
         if removed:
             success = 'Removed the following members:'

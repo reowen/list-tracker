@@ -320,7 +320,7 @@ class WishList(ndb.Model):
     def by_user_group(cls, user_id, group_id, ancestor_key = wishlist_key()):
         lists = cls.query(cls.creator_id == user_id,
                           cls.group == group_id,
-                          ancestor=ancestor_key).get()
+                          ancestor=ancestor_key).fetch()
         return lists
 
     @classmethod

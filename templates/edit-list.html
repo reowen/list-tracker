@@ -9,6 +9,16 @@
   </div>
 </div>
 
+{% if groupless %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="alert alert-danger" role="alert">
+      This list has been removed from its original group, but has been kept for your records.  You may delete the list if you no longer need it.
+    </div>
+  </div>
+</div>
+{% endif %}
+
 <div class="col-md-8 col-md-offset-2">
 
   <form role="form" method="post">
