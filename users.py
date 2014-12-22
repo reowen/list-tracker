@@ -1,8 +1,10 @@
 import webapp2
 import jinja2
 import admin
+import logging
 
 from google.appengine.api import mail
+from google.appengine.ext import deferred
 
 """
 User registration and login classes
@@ -226,7 +228,7 @@ class ChangeEmail(admin.Handler):
                 self.render('change-email.html', **params)
 
 
-TestEmail = mail.EmailMessage(sender="list.tracker.app@gmail.com",
+testemail = mail.EmailMessage(sender="list.tracker.app@gmail.com",
                               subject="This is a test email")
 class RecoverPassword(admin.Handler):
     def get(self):
@@ -247,8 +249,8 @@ class RecoverPassword(admin.Handler):
             self.render('recover-password.html', **params)
             return
         else:
-            TestEmail.to = email
-            TestEmail.body = """
+            testemail.to = email
+            testemail.body = """
             Dear %s,
 
             This email is a test email.
@@ -256,7 +258,8 @@ class RecoverPassword(admin.Handler):
             The list-tracker team.
             """ % acct.firstname
 
-            TestEmail.send()
+            #put email into task queue
+            deferred.defer(send_email, testemail)
 
             params['success'] = 'An email has been sent to %s' % email
             self.render('recover-password.html', **params)
@@ -264,7 +267,13 @@ class RecoverPassword(admin.Handler):
 
 
 
+"""
+Email procedures
+"""
 
+def send_email(message):
+    logging.info('Sending email to %s' % message.to)
+    message.send()
 
 
 
