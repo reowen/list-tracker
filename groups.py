@@ -126,11 +126,21 @@ class FindGroup(admin.Handler):
 
 class InviteToGroup(admin.Handler):
     def get(self):
-        if self.user:
-            self.render('front.html', user = self.user,
-                        text='Invite to group feature is under development')
-        else:
+        if not self.user:
             self.redirect('/')
+        else:
+            g = self.request.get('g')
+            params = dict(user = self.user)
+            if not g:
+                params['invalid'] = 'Something went wrong.  <a href="/manage-groups">Click here</a> to return to manage groups page and try again.'
+            else:
+                group = admin.Group.by_id(int(g))
+                if not group:
+                    params['invalid'] = 'Group not found.  <a href="/manage-groups">Click here</a> to return to manage groups page and try again.'
+                else:
+                    params['group'] = group
+            self.render('invite-to-group.html', **params)
+
 
 class DeleteGroup(admin.Handler):
     referer = '/'

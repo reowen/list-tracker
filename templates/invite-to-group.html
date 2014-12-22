@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if success %}
+<div class="row">
+  <div class="alert alert-success" role="alert">{{success}}</div>
+</div>
+{% endif %}
+
+{% if invalid %}
+<div class="row">
+  <div class="alert alert-danger" role="alert">{{invalid | safe}}</div>
+</div>
+{% endif %}
+
+{% if not invalid %}
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 page-box header-color">
+    <div class="row page-box-header">
+      <div class="col-md-12 text-right  page-box-title">
+        Invite Friends to {{group.groupname}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 page-box">
+    <hr>
+    <div class="note-on-item">
+      Enter the email addresses of the friends you wish to invite below, separated by semicolons.
+    </div>
+    <hr>
+    <form role="form" method="post">
+      <div class="form-group">
+        <label>Invite Friends</label>
+        <input type="textbox" class="form-control" name="friends" value="{{friends}}" placeholder="friend@example.com; mom@example.com; brother@example.com">
+        <div class="error">{{email_error}}</div>
+      </div>
+      <hr>
+      <button type="submit" class="btn btn-primary">Invite to Group</button>
+    </form>
+    <hr>
+  </div>
+</div>
+
+{% endif %}
+
+{% endblock %}
