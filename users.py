@@ -114,39 +114,6 @@ class Logout(admin.Handler):
 Account Management Classes
 """
 
-class ResetPassword(admin.Handler):
-    def get(self):
-        self.render('reset-password.html')
-
-    def post(self):
-        email = self.request.get('email')
-        #email should not be case-sensitive
-        email = email.lower()
-        new_password = self.request.get('new_password')
-        verify = self.request.get('verify')
-
-        has_error = False
-        params = dict()
-
-        account = admin.User.by_email(email)
-        if not account:
-            params['email_error'] = 'There is no account with this email.'
-            has_error = True
-        elif new_password != verify:
-            params['new_pw_error'] = 'New password and verify password do not match.'
-            has_error = True
-
-        if has_error:
-            self.render('reset-password.html', **params)
-
-        else:
-            new_pw_hash = admin.make_pw_hash(email, new_password)
-            account.pw = new_pw_hash
-            account.put()
-            params['pw_success'] = 'Successfully changed your password.'
-            self.render('reset-password.html', **params)
-
-
 class ChangePassword(admin.Handler):
     def get(self):
         if not self.user:
@@ -228,8 +195,8 @@ class ChangeEmail(admin.Handler):
                 self.render('change-email.html', **params)
 
 
-testemail = mail.EmailMessage(sender="list.tracker.app@gmail.com",
-                              subject="This is a test email")
+recoveremail = mail.EmailMessage(sender="list.tracker.app@gmail.com",
+                                 subject="List-Tracker recover password")
 class RecoverPassword(admin.Handler):
     def get(self):
         if not self.user:
@@ -249,23 +216,84 @@ class RecoverPassword(admin.Handler):
             self.render('recover-password.html', **params)
             return
         else:
-            testemail.to = email
-            testemail.body = """
+            acct.recover = admin.make_random_recover()
+
+            recoveremail.to = email
+            recoveremail.body = """
             Dear %s,
 
-            This email is a test email.
+            You recently requested to recover a forgotten password. Click the link below to reset your password.
+
+            https://list-tracker.appspot.com/reset-pw?u=%s&v=%s
 
             The list-tracker team.
-            """ % acct.firstname
+            """ % (acct.firstname, acct.key.id(), acct.recover)
 
-            # smtp_connect()
             #put email into task queue
-            deferred.defer(send_email, testemail)
+            deferred.defer(send_email, recoveremail)
+
+            #send recover password back to datastore
+            acct.put()
 
             params['success'] = 'An email has been sent to %s.  It may take a few minutes to arrive.' % email
             self.render('recover-password.html', **params)
 
 
+class ResetPassword(admin.Handler):
+    def get(self):
+        u = self.request.get('u')
+        v = self.request.get('v')
+        params = {}
+        acct = None
+        invalid_link_msg = 'Invalid link.  Please <a href="/recover-password">click here to send a new recover password email.</a>'
+        if not u:
+            params['invalid'] = invalid_link_msg
+        else:
+            acct = admin.User.by_id(int(u))
+            if not acct:
+                params['invalid'] = invalid_link_msg
+            else:
+                if v != acct.recover:
+                    params['invalid'] = invalid_link_msg
+                else:
+                    params['email'] = acct.email
+        if v == 'default':
+            params['invalid'] = invalid_link_msg
+
+        self.render('reset-password.html', **params)
+
+    def post(self):
+        password = self.request.get('password')
+        verify = self.request.get('verify')
+        u = self.request.get('u')
+        if not u:
+            params['invalid'] = 'Something went wrong.  Please <a href="/recover-password">click here to send a new recover password email.</a>'
+            self.render('reset-password.html', **params)
+            return
+
+        has_error = False
+        params = dict()
+
+        acct = admin.User.by_id(int(u))
+        if not acct:
+            params['invalid'] = 'Something went wrong.  Please <a href="/recover-password">click here to send a new recover password email.</a>'
+            self.render('reset-password.html', **params)
+            return
+        elif password != verify:
+            params['pw_error'] = 'Password and verify password do not match.'
+            has_error = True
+
+        params['email'] = acct.email
+        if has_error:
+            self.render('reset-password.html', **params)
+
+        else:
+            new_pw_hash = admin.make_pw_hash(acct.email, password)
+            acct.pw = new_pw_hash
+            acct.recover = 'default'
+            acct.put()
+            params['success'] = 'Successfully changed your password.'
+            self.render('reset-password.html', **params)
 
 
 """

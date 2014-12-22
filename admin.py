@@ -429,6 +429,8 @@ def check_secure_val(h):
 """
 Password security procedures
 """
+def make_random_recover(size=30, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(chars) for __ in range(size))
 
 def make_salt(size=5, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for __ in range(size))
