@@ -2,7 +2,7 @@ import webapp2
 import jinja2
 import admin
 
-from google.appendine.api import mail
+from google.appengine.api import mail
 
 """
 User registration and login classes
@@ -235,12 +235,31 @@ class RecoverPassword(admin.Handler):
         else:
             params = dict(user = self.user)
             self.render('recover-password.html', **params)
+    def post(self):
+        email = self.request.get('email')
+        params = dict(user = self.user,
+                      email = email)
+        if not email:
+            self.redirect('recover-password')
+        acct = admin.User.by_email(email)
+        if not acct:
+            params['email_error'] = 'Email not found.'
+            self.render('recover-password.html', **params)
+            return
+        else:
+            TestEmail.to = email
+            TestEmail.body = """
+            Dear %s,
 
+            This email is a test email.
 
+            The list-tracker team.
+            """ % acct.firstname
 
-
+            TestEmail.send()
 
             params['success'] = 'An email has been sent to %s' % email
+            self.render('recover-password.html', **params)
 
 
 
