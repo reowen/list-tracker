@@ -2,6 +2,8 @@ import webapp2
 import jinja2
 import admin
 
+from google.appendine.api import mail
+
 """
 User registration and login classes
 """

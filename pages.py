@@ -4,7 +4,6 @@ import admin
 
 import time
 from google.appengine.ext import ndb
-from google.appending.api import mail
 
 
 class MainPage(admin.Handler):
