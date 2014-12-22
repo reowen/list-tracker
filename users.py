@@ -199,17 +199,13 @@ recoveremail = mail.EmailMessage(sender="list.tracker.app@gmail.com",
                                  subject="List-Tracker recover password")
 class RecoverPassword(admin.Handler):
     def get(self):
-        if not self.user:
-            self.redirect('/')
-        else:
-            params = dict(user = self.user)
-            self.render('recover-password.html', **params)
+        self.render('recover-password.html')
     def post(self):
         email = self.request.get('email')
-        params = dict(user = self.user,
-                      email = email)
+        params = dict(email = email)
         if not email:
-            self.redirect('recover-password')
+            self.redirect('/recover-password')
+            return
         acct = admin.User.by_email(email)
         if not acct:
             params['email_error'] = 'Email not found.'
@@ -228,7 +224,7 @@ class RecoverPassword(admin.Handler):
 
             https://list-tracker.appspot.com/reset-pw?u=%s&v=%s
 
-            The list-tracker team.
+            -The list-tracker team.
             """ % (acct.firstname, acct.key.id(), recover_key)
 
             #put email into task queue
