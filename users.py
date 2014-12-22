@@ -224,6 +224,30 @@ class ChangeEmail(admin.Handler):
                 self.render('change-email.html', **params)
 
 
+TestEmail = mail.EmailMessage(sender="list.tracker.app@gmail.com",
+                              subject="This is a test email")
+class RecoverPassword(admin.Handler):
+    def get(self):
+        if not self.user:
+            self.redirect('/')
+        else:
+            params = dict(user = self.user)
+            self.render('recover-password.html', **params)
+
+
+
+
+
+            params['success'] = 'An email has been sent to %s' % email
+
+
+
+
+
+
+
+
+
 
 """
 Form validation procedures
