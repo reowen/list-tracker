@@ -261,7 +261,7 @@ class RecoverPassword(admin.Handler):
             #put email into task queue
             deferred.defer(send_email, testemail)
 
-            params['success'] = 'An email has been sent to %s' % email
+            params['success'] = 'An email has been sent to %s.  It may take a few minutes to arrive.' % email
             self.render('recover-password.html', **params)
 
 
