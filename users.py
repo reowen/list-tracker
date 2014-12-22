@@ -258,6 +258,7 @@ class RecoverPassword(admin.Handler):
             The list-tracker team.
             """ % acct.firstname
 
+            # smtp_connect()
             #put email into task queue
             deferred.defer(send_email, testemail)
 
@@ -270,6 +271,13 @@ class RecoverPassword(admin.Handler):
 """
 Email procedures
 """
+from smtplib import SMTP
+
+def smtp_connect():
+    s = SMTP()
+    s.ehlo()
+    s.connect()
+    # s.connect(host='localhost', port=25)
 
 def send_email(message):
     logging.info('Sending email to %s' % message.to)
