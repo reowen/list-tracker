@@ -216,7 +216,9 @@ class RecoverPassword(admin.Handler):
             self.render('recover-password.html', **params)
             return
         else:
-            acct.recover = admin.make_random_recover()
+            recover_key = admin.make_random_recover()
+            # logging.info('recover key: %s' % recover_key)
+            acct.recover = admin.make_pw_hash(acct.email, recover_key)
 
             recoveremail.to = email
             recoveremail.body = """
@@ -227,7 +229,7 @@ class RecoverPassword(admin.Handler):
             https://list-tracker.appspot.com/reset-pw?u=%s&v=%s
 
             The list-tracker team.
-            """ % (acct.firstname, acct.key.id(), acct.recover)
+            """ % (acct.firstname, acct.key.id(), recover_key)
 
             #put email into task queue
             deferred.defer(send_email, recoveremail)
@@ -253,7 +255,7 @@ class ResetPassword(admin.Handler):
             if not acct:
                 params['invalid'] = invalid_link_msg
             else:
-                if v != acct.recover:
+                if not admin.check_pw(acct.email, v, acct.recover):
                     params['invalid'] = invalid_link_msg
                 else:
                     params['email'] = acct.email
@@ -266,6 +268,7 @@ class ResetPassword(admin.Handler):
         password = self.request.get('password')
         verify = self.request.get('verify')
         u = self.request.get('u')
+        v = self.request.get('v')
         if not u:
             params['invalid'] = 'Something went wrong.  Please <a href="/recover-password">click here to send a new recover password email.</a>'
             self.render('reset-password.html', **params)
@@ -279,6 +282,8 @@ class ResetPassword(admin.Handler):
             params['invalid'] = 'Something went wrong.  Please <a href="/recover-password">click here to send a new recover password email.</a>'
             self.render('reset-password.html', **params)
             return
+        elif not admin.check_pw(acct.email, v, acct.recover):
+            params['invalid'] = 'Something went wrong.  Please <a href="/recover-password">click here to send a new recover password email.</a>'
         elif password != verify:
             params['pw_error'] = 'Password and verify password do not match.'
             has_error = True
