@@ -2,6 +2,7 @@ import webapp2
 import jinja2
 import admin
 import time
+import logging
 
 import json
 
@@ -164,7 +165,12 @@ class InviteToGroup(admin.Handler):
             has_error = True
         else:
             #update Group() datastore entity with secret join_key
-            join_key = 'comingsoon'
+            join_key = admin.make_random_string()
+            # logging.info('join_key: %s' % join_key)
+            # group.join_key = admin.make_pw_hash(group.groupname, join_key)
+            group.join_key = join_key
+            group.put()
+
             invite_email.subject = '%s %s has invited you to List-Tracker!' % (self.user.firstname, self.user.lastname)
             invite_email.body = """
             %s

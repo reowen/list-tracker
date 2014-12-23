@@ -212,7 +212,7 @@ class RecoverPassword(admin.Handler):
             self.render('recover-password.html', **params)
             return
         else:
-            recover_key = admin.make_random_recover()
+            recover_key = admin.make_random_string()
             # logging.info('recover key: %s' % recover_key)
             acct.recover = admin.make_pw_hash(acct.email, recover_key)
 

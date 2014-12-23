@@ -162,7 +162,7 @@ class Group(ndb.Model):
     pw = ndb.StringProperty(required = True)
     creator = ndb.IntegerProperty(required = True)
     admin = ndb.StringProperty()
-    email_val = ndb.StringProperty()
+    join_key = ndb.StringProperty()
     created = ndb.DateTimeProperty(auto_now_add=True)
 
     @classmethod
@@ -430,7 +430,7 @@ def check_secure_val(h):
 """
 Password security procedures
 """
-def make_random_recover(size=30, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
+def make_random_string(size=30, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for __ in range(size))
 
 def make_salt(size=5, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
