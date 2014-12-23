@@ -140,6 +140,25 @@ class InviteToGroup(admin.Handler):
                 else:
                     params['group'] = group
             self.render('invite-to-group.html', **params)
+    def post(self):
+        g = self.request.get('g')
+        params = dict(user = self.user)
+        group = admin.Group.by_id(int(g))
+        if not group:
+            params['invalid'] = 'Group not found.  <a href="/manage-groups">Click here</a> to return to manage groups page and try again.'
+        else:
+            params['group'] = group
+        friends = self.request.get('friends')
+        params['friends'] = friends
+        friends = get_friends(friends)
+        #if there's a validation error in friends list
+        if friends[1]:
+            params['error'] = 'The following emails failed email validations: %s.  Be sure all emails are separated by semicolons.' % repr(friends[1])
+            has_error = True
+        else:
+            params['success'] = 'Emails have been sent! %s' % friends[0]
+        self.render('invite-to-group.html', **params)
+
 
 
 class DeleteGroup(admin.Handler):
@@ -399,6 +418,20 @@ def valid_password(password):
 EMAIL_RE  = re.compile(r'^[\S]+@[\S]+\.[\S]+$')
 def valid_email(email):
     return not email or EMAIL_RE.match(email)
+
+#takes a string of emails separated by semicolons
+#returns a list of emails and a list of emails that failed validation
+def get_friends(friends):
+    splitlist = friends.split(';')
+    friendlist = []
+    errorlist = []
+    for email in splitlist:
+        email = email.strip()
+        friendlist.append(email)
+        if not valid_email(email):
+            errorlist.append(email)
+    return friendlist, errorlist
+
 
 
 import hmac
