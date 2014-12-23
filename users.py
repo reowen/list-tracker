@@ -228,7 +228,7 @@ class RecoverPassword(admin.Handler):
             """ % (acct.firstname, acct.key.id(), recover_key)
 
             #put email into task queue
-            deferred.defer(send_email, recoveremail)
+            deferred.defer(admin.send_email, recoveremail)
 
             #send recover password back to datastore
             acct.put()
@@ -295,25 +295,6 @@ class ResetPassword(admin.Handler):
             acct.put()
             params['success'] = 'Successfully changed your password.'
             self.render('reset-password.html', **params)
-
-
-"""
-Email procedures
-"""
-from smtplib import SMTP
-
-def smtp_connect():
-    s = SMTP()
-    s.ehlo()
-    s.connect()
-    # s.connect(host='localhost', port=25)
-
-def send_email(message):
-    logging.info('Sending email to %s' % message.to)
-    message.send()
-
-
-
 
 
 """

@@ -6,7 +6,8 @@ import datetime
 
 from google.appengine.ext import ndb
 from google.appengine.api import memcache
-##from google.appengine.api import logservice
+from google.appengine.api import mail
+from google.appengine.ext import deferred
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir),
@@ -450,3 +451,11 @@ def check_pw(name, pw, h):
     salt = h.split(',')[1]
     #then we pass the extracted salt through our make_pw_hash function
     return h == make_pw_hash(name, pw, salt)
+
+"""
+Email procedures
+"""
+
+def send_email(message):
+    logging.info('Sending email to %s' % message.to)
+    message.send()

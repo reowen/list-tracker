@@ -5,6 +5,9 @@ import time
 
 import json
 
+from google.appengine.api import mail
+from google.appengine.ext import deferred
+
 """
 Managing Groups
 """
@@ -124,6 +127,8 @@ class FindGroup(admin.Handler):
         else:
             self.redirect('/')
 
+invite_email = mail.EmailMessage(sender="list.tracker.app@gmail.com")
+
 class InviteToGroup(admin.Handler):
     def get(self):
         if not self.user:
@@ -142,7 +147,9 @@ class InviteToGroup(admin.Handler):
             self.render('invite-to-group.html', **params)
     def post(self):
         g = self.request.get('g')
-        params = dict(user = self.user)
+        msg = self.request.get('msg')
+        params = dict(user = self.user,
+                      msg = msg)
         group = admin.Group.by_id(int(g))
         if not group:
             params['invalid'] = 'Group not found.  <a href="/manage-groups">Click here</a> to return to manage groups page and try again.'
@@ -156,6 +163,27 @@ class InviteToGroup(admin.Handler):
             params['error'] = 'The following emails failed email validations: %s.  Be sure all emails are separated by semicolons.' % repr(friends[1])
             has_error = True
         else:
+            #update Group() datastore entity with secret join_key
+            join_key = 'comingsoon'
+            invite_email.subject = '%s %s has invited you to List-Tracker!' % (self.user.firstname, self.user.lastname)
+            invite_email.body = """
+            %s
+
+            ---
+            Your friend %s %s is inviting you to join a list-tracker shared group.  This group allows you to coordinate gift-lists with friends.  It keeps track of who has bought what, so you don't need to worry about double-gifting.
+
+            Click the link below to get started:
+
+            https://list-tracker.appspot.com/join-group?g=%s&v=%s
+
+            -The List-Tracker team
+
+            """ % (msg, self.user.firstname, self.user.lastname, g, join_key)
+
+            for email in friends[0]:
+                invite_email.to = email
+                #put email into task queue
+                deferred.defer(admin.send_email, invite_email)
             params['success'] = 'Emails have been sent! %s' % friends[0]
         self.render('invite-to-group.html', **params)
 
