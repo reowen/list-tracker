@@ -54,11 +54,8 @@ class CreateGroup(admin.Handler):
             g = admin.Group.create(groupname, password, creator)
             g_key = g.put()
             #add as a group member
-            group_id = str(g_key.id())
-            member_id = self.user.key.id()
             creator = True
-            member = admin.Member.add(group_id, member_id,
-                                      groupname, creator)
+            member = admin.Member.add(g, self.user, creator)
             if member:
                 member.put()
                 time.sleep(0.1)
@@ -88,8 +85,7 @@ class JoinGroup(admin.Handler):
             self.render('join.html', user = self.user,
                         error = 'Group name and password do not match.')
         else:
-            member = admin.Member.add(str(g.key.id()), self.user.key.id(),
-                                      groupname)
+            member = admin.Member.add(g, self.user)
             if member:
                 member.put()
                 time.sleep(0.1)
@@ -160,7 +156,7 @@ class InviteToGroup(admin.Handler):
 
             Click the link below to get started:
 
-            https://list-tracker.appspot.com/join-group?g=%s&v=%s
+            https://list-tracker.appspot.com/my-groups/join-group-email?g=%s&v=%s
 
             -The List-Tracker team
 
@@ -173,6 +169,36 @@ class InviteToGroup(admin.Handler):
             params['success'] = 'Emails have been sent! %s' % friends[0]
         self.render('invite-to-group.html', **params)
 
+class JoinGroupEmail(admin.Handler):
+    def get(self):
+        if not self.user:
+            self.redirect('/')
+        else:
+            g = self.request.get('g')
+            v = self.request.get('v')
+            params = dict(success = False)
+            invalid_msg = 'There was an error processing your request.  Please request a new group-invite email.'
+            if not g:
+                params['invalid'] = invalid_msg
+            group = admin.Group.by_id(int(g))
+            if not group:
+                params['invalid'] = invalid_msg
+            elif group.join_key != v or group.join_key == 'default':
+                params['invalid'] = invalid_msg
+            else:
+                params['group'] = group
+                member = admin.Member.add(group, self.user)
+                if not member:
+                    params['invalid'] = 'You already belong to this group'
+                else:
+                    member.put()
+                    time.sleep(0.1)
+                    #update group-members cache
+                    admin.Group.get_members(str(group.key.id()), update = True)
+                    #update user-groups cache
+                    admin.User.get_groups(self.user.key.id(), update = True)
+                    params['success'] = True
+            self.render('join-group-email.html', **params)
 
 
 class DeleteGroup(admin.Handler):

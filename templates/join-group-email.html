@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if success %}
+<div class="row">
+  <div class="alert alert-success" role="alert">You have successfully joined {{group.groupname}}!</div>
+</div>
+<hr>
+<div class="row">
+  <div class="col-md-4 col-md-offset-4 text-center">
+    <a class="btn btn-primary" href="/groups?g={{group.key.id()}}">Go to Group</a>
+  </div>
+</div>
+{% endif %}
+
+{% if invalid %}
+<div class="row">
+  <div class="alert alert-danger" role="alert">{{invalid}}</div>
+</div>
+{% endif %}
+
+{% endblock %}

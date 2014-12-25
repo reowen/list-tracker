@@ -129,21 +129,19 @@ class Member(ndb.Model):
         return e
 
     @classmethod
-    def add(cls, group_id, member_id, groupname, creator = False, admin = False):
-        groupcheck = Member.query(Member.member == member_id,
-                                  Member.groupname == groupname,
-                                  ancestor=member_key()).get()
+    def add(cls, group, member, creator = False, admin = False):
+        groupcheck = cls.query(cls.member == member.key.id(),
+                               cls.groupname == group.groupname,
+                               ancestor=member_key()).get()
+        membername = member.firstname + ' ' + member.lastname
         if groupcheck:
             return None
-        m = User.by_id(member_id)
-        if m:
-            membername = m.firstname + ' ' + m.lastname
-        if groupname and membername:
+        elif membername:
             return Member(parent = member_key(),
-                           member = member_id,
+                           member = member.key.id(),
                            membername = membername,
-                           group = group_id,
-                           groupname = groupname,
+                           group = str(group.key.id()),
+                           groupname = group.groupname,
                            creator = creator,
                            admin = admin)
         else:
@@ -177,13 +175,14 @@ class Group(ndb.Model):
     @classmethod
     #creator must be an integer, representing the user_id extracted from
     #the cookie
-    def create(cls, groupname, pw, creator, admin = None):
+    def create(cls, groupname, pw, creator, admin = None, join_key = 'default'):
         pw_hash = make_pw_hash(groupname, pw)
         return Group(parent = group_key(),
                      groupname = groupname,
                      pw = pw_hash,
                      creator = creator,
-                     admin = admin)
+                     admin = admin,
+                     join_key = join_key)
 
     @classmethod
     def join(cls, groupname, pw):
