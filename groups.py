@@ -67,18 +67,9 @@ class CreateGroup(admin.Handler):
                 #update user-groups cache
                 admin.User.get_groups(self.user.key.id(), update = True)
                 self.redirect('/groups?g=%s' % g_key.id())
-##                self.render('create-group.html', user = self.user,
-##                            success = 'Successfully created group %s' % groupname)
             else:
                 params['groupname_error'] = 'There was an error processing your request.'
                 self.render('create-group.html', **params)
-
-
-
-##            if invite == 'now':
-##                self.redirect('/invite-to-group')
-##            else:
-##                self.redirect('/')
 
 
 class JoinGroup(admin.Handler):
@@ -105,20 +96,9 @@ class JoinGroup(admin.Handler):
                 admin.Group.get_members(str(g.key.id()), update = True)
                 admin.User.get_groups(self.user.key.id(), update = True)
                 self.redirect('/groups?g=%s' % g.key.id())
-##                self.render('join.html', user = self.user,
-##                            success = 'Successfully joined %s' % groupname)
             else:
                 self.render('join.html', user = self.user,
                             error = 'You already belong to this group')
-
-##            user = admin.User.by_id(int(self.user_id))
-##            members = g.members
-##            members[self.user_id] = [user.firstname, user.lastname]
-##            g.put()
-##            group = g.groupname
-##            m = admin.GroupMember.add(group, self.user_id)
-##            m.put()
-##            self.redirect('/')
 
 class FindGroup(admin.Handler):
     def get(self):
