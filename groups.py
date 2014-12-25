@@ -176,7 +176,8 @@ class JoinGroupEmail(admin.Handler):
         else:
             g = self.request.get('g')
             v = self.request.get('v')
-            params = dict(success = False)
+            params = dict(user = self.user,
+                          success = False)
             invalid_msg = 'There was an error processing your request.  Please request a new group-invite email.'
             if not g:
                 params['invalid'] = invalid_msg
