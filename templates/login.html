@@ -40,7 +40,11 @@
     <div class="row">
       <div class="col-md-12">
         <div class="error">{{reset_pw | safe}}</div>
+        {% if group_invite %}
+        <a href="/signup?g={{g}}&v={{v}}&group-invite={{group_invite}}">Sign me up!</a> | <a href="/recover-password">Recover Password</a>
+        {% else %}
         <a href="/signup">Sign me up!</a> | <a href="/recover-password">Recover Password</a>
+        {% endif %}
       </div>
     </div>
     <hr>

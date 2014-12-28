@@ -28,11 +28,13 @@ class Signup(admin.Handler):
         verify = self.request.get('verify')
         group = self.request.get('group')
 
+        #pull variables in case of group-invite
+        g = self.request.get('g')
+        v = self.request.get('v')
+        group_invite = self.request.get('group-invite')
+
         params = dict(firstname = firstname, lastname = lastname,
                       email = email)
-
-
-
 
         if not firstname:
             params['firstname_error'] = "First name is required"
@@ -64,13 +66,10 @@ class Signup(admin.Handler):
             u = admin.User.register(firstname, lastname, email, password)
             u.put()
             self.login(u)
-            self.redirect('/signup/welcome')
-##            if group == 'join':
-##                self.redirect('/my-groups/join-group')
-##            if group == 'create':
-##                self.redirect('/my-groups/create-group')
-##            else:
-##                self.redirect('/')
+            if group_invite:
+                self.redirect('/my-groups/join-group-email?g=%s&v=%s&group-invite=%s' % (g, v, group_invite))
+            else:
+                self.redirect('/signup/welcome')
 
 #consider updating the validations for this class
 class Login(admin.Handler):
@@ -78,23 +77,35 @@ class Login(admin.Handler):
         if self.user:
             self.redirect('/')
         else:
-            self.render('login.html')
-
+            #in case of a group-invite
+            g = self.request.get('g')
+            v = self.request.get('v')
+            group_invite = self.request.get('group-invite')
+            params = dict(g = g, v = v, group_invite = group_invite)
+            self.render('login.html', **params)
     def post(self):
         email = self.request.get('email')
         #email should not be case-sensitive
         email = email.lower()
         password = self.request.get('password')
         remember = self.request.get('remember')
-        params = dict(email = email)
+        #pull variables to see if they've been invited to join a group
+        g = self.request.get('g')
+        v = self.request.get('v')
+        group_invite = self.request.get('group-invite')
+        params = dict(email = email, g = g, v = v, group_invite = group_invite)
 
         u = admin.User.login(email, password)
         if u:
+            #if they clicked "keep me logged in"
             if remember:
                 self.remember_login(u)
             else:
                 self.login(u)
-            self.redirect('/')
+            if group_invite:
+                self.redirect('/my-groups/join-group-email?g=%s&v=%s&group-invite=%s' % (g, v, group_invite))
+            else:
+                self.redirect('/')
         else:
             email_found = admin.User.by_email(email)
             if not email_found:

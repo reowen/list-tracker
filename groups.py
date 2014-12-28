@@ -171,11 +171,12 @@ class InviteToGroup(admin.Handler):
 
 class JoinGroupEmail(admin.Handler):
     def get(self):
+        g = self.request.get('g')
+        v = self.request.get('v')
         if not self.user:
-            self.redirect('/')
+            group_invite = 'True'
+            self.redirect('/login?g=%s&v=%s&group-invite=%s' % (g, v, group_invite))
         else:
-            g = self.request.get('g')
-            v = self.request.get('v')
             params = dict(user = self.user,
                           success = False)
             invalid_msg = 'There was an error processing your request.  Please request a new group-invite email.'

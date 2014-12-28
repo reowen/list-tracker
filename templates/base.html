@@ -38,7 +38,7 @@
         <li>
           <a class="login-link" href="/logout">Logout</a>
         </li>
-      {% else %}
+      {% elif not group_invite %}
       <li>
         <a href="/login">Login</a>
       </li>
@@ -89,7 +89,7 @@
       </ul>
     </footer>
   </div>
-  {% else %}
+  {% elif not group_invite %}
   <div class="container">
     <footer>
       <ul class="nav navbar-nav">
