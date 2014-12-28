@@ -99,10 +99,35 @@ class JoinGroup(admin.Handler):
 class FindGroup(admin.Handler):
     def get(self):
         if self.user:
-            self.render('find-group.html', user = self.user,
-                        text='Find Group feature is under development')
+            self.render('find-group.html', user = self.user)
         else:
             self.redirect('/')
+    def post(self):
+        firstname = self.request.get('firstname')
+        lastname = self.request.get('lastname')
+        params = dict(user = self.user,
+                      firstname = firstname,
+                      lastname = lastname)
+        has_error = False
+        if firstname or lastname:
+            if not lastname:
+                params['error'] = 'Please enter a last name.'
+                has_error = True
+            elif not firstname:
+                params['error'] = 'Please enter a first name.'
+                has_error = True
+            if has_error:
+                self.render('find-group.html', **params)
+            else:
+                membername = firstname + ' ' + lastname
+                groups = admin.Member.by_membername(membername)
+                params['groups'] = groups
+                params['membername'] = membername
+                self.render('find-group.html', **params)
+        else:
+            self.redirect('/')
+
+
 
 invite_email = mail.EmailMessage(sender="list.tracker.app@gmail.com")
 

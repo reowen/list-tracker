@@ -54,7 +54,7 @@
         {% for group in groups %}
         <div class="radio">
           <label>
-            <input type="radio" name="join_{{group.key.id()}}"> {{group.groupname}}
+            <input type="radio" name="join_{{group.group}}"> {{group.groupname}}
           </label>
         </div>
         {% endfor %}

@@ -113,6 +113,11 @@ class Member(ndb.Model):
         return m
 
     @classmethod
+    def by_membername(cls, membername, ancestor_key = member_key()):
+        g = cls.query(cls.membername == membername, ancestor = ancestor_key).fetch()
+        return g
+
+    @classmethod
     def by_group_id(cls, group_id, ancestor_key = member_key()):
         g = cls.query(cls.group == group_id, ancestor = ancestor_key).fetch()
         return g
