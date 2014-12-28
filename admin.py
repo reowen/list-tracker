@@ -157,6 +157,7 @@ def group_key(group_name = 'default'):
 
 class Group(ndb.Model):
     groupname = ndb.StringProperty(required = True)
+    groupname_lookup = ndb.StringProperty(required = True)
     pw = ndb.StringProperty(required = True)
     creator = ndb.IntegerProperty(required = True)
     admin = ndb.StringProperty()
@@ -165,7 +166,8 @@ class Group(ndb.Model):
 
     @classmethod
     def by_name(cls, groupname, ancestor_key = group_key()):
-        g = cls.query(cls.groupname == groupname, ancestor=ancestor_key).get()
+        groupname_lookup = groupname.lower()
+        g = cls.query(cls.groupname_lookup == groupname_lookup, ancestor=ancestor_key).get()
         return g
 
     @classmethod
@@ -176,9 +178,11 @@ class Group(ndb.Model):
     #creator must be an integer, representing the user_id extracted from
     #the cookie
     def create(cls, groupname, pw, creator, admin = None, join_key = 'default'):
-        pw_hash = make_pw_hash(groupname, pw)
+        groupname_lookup = groupname.lower()
+        pw_hash = make_pw_hash(groupname_lookup, pw)
         return Group(parent = group_key(),
                      groupname = groupname,
+                     groupname_lookup = groupname_lookup,
                      pw = pw_hash,
                      creator = creator,
                      admin = admin,
@@ -187,6 +191,7 @@ class Group(ndb.Model):
     @classmethod
     def join(cls, groupname, pw):
         g = cls.by_name(groupname)
+        groupname = groupname.lower()
         if g and check_pw(groupname, pw, g.pw):
             return g
 
