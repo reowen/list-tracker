@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 page-box header-color">
+    <div class="page-box-title text-right">
+      Find a Group
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 page-box">
+    <br>
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1 note-on-item">
+        Write the first and last name of a group-member you would like to find, then click "search"
+      </div>
+    </div>
+    <br>
+    <div class="col-md-10 col-md-offset-1">
+    <form role="form" method="post">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" class="form-control" name="firstname" value="{{firstname}}" placeholder="firstname">
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" class="form-control" name="lastname" value="{{lastname}}" placeholder="lastname">
+        <div class="error">{{error}}</div>
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+    </div>
+    <hr>
+  </div>
+</div>
+
+{% if groups %}
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 page-box">
+    <br>
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1 note-on-item">
+        The groups below have {{membername}} as a member.  Select the group you wish to join, then click request to join.
+      </div>
+    </div>
+    <br>
+    <div class="col-md-10 col-md-offset-1">
+      <form role="form" method="post">
+        {% for group in groups %}
+        <div class="radio">
+          <label>
+            <input type="radio" name="join_{{group.key.id()}}"> {{group.groupname}}
+          </label>
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Request to Join</button>
+      </form>
+    </div>
+    <hr>
+  </div>
+</div>
+{% endif %} {# "end if groups" #}
+
+
+{% endblock %}

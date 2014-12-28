@@ -99,7 +99,7 @@ class JoinGroup(admin.Handler):
 class FindGroup(admin.Handler):
     def get(self):
         if self.user:
-            self.render('front.html', user = self.user,
+            self.render('find-group.html', user = self.user,
                         text='Find Group feature is under development')
         else:
             self.redirect('/')
