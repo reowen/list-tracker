@@ -1,0 +1,11 @@
+Things to test:
+-email services
+	-invite member
+	-recover password
+	-confirm invitation
+
+Features to add:
+-list types
+
+
+
