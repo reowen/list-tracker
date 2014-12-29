@@ -168,35 +168,63 @@ class FindGroup(admin.Handler):
                     #put email into task queue
                     deferred.defer(admin.send_email, findgroup_email)
                     params['success'] = 'A group invitation request has been sent to the creator of %s.  You will receive email confirmation when the request is approved' % g.groupname
+
                     self.render('find-group.html', **params)
 
 confirmation_email = mail.EmailMessage(sender="list.tracker.app@gmail.com")
 
 class ConfirmMember(admin.Handler):
     def get(self):
+        params = dict()
+        has_error = False
+        if self.user:
+            params['user'] = self.user
+
         m = self.request.get('m')
         g = self.request.get('g')
+
         member = admin.User.by_id(int(m))
+        if not member:
+            params['error'] = 'User account not found, please retry the link in the email.'
+            has_error = True
+
         group = admin.Group.by_id(int(g))
+        if not group:
+            params['error'] = 'Group ID not found, please retry the link in the email.'
+            has_error = True
+
+        if has_error:
+            self.render('confirm.html', **params)
+            return
+
         add = admin.Member.add(group, member)
-        time.sleep(0.1)
-        #update group-members cache
-        admin.Group.get_members(str(group.key.id()), update = True)
-        #update user-groups cache
-        admin.User.get_groups(member.key.id(), update = True)
+        if not add:
+            params['error'] = 'There was an error processing the request, please retry the link in the email.'
+            self.render('confirm.html', **params)
+            return
+        else:
+            add.put()
+            time.sleep(0.1)
+            #update group-members cache
+            admin.Group.get_members(str(group.key.id()), update = True)
+            #update user-groups cache
+            admin.User.get_groups(member.key.id(), update = True)
 
-        confirmation_email.to = member.email
-        confirmation_email.subject = 'Your request to join %s has been approved!' % group.groupname
-        confirmation_email.body = """
-        Hi %s,
+            confirmation_email.to = member.email
+            confirmation_email.subject = 'Your request to join %s has been approved!' % group.groupname
+            confirmation_email.body = """
+            Hi %s,
 
-        Your request to join %s has been approved.  Log in to https://list-tracker.appspot.com to see the group.
+            Your request to join %s has been approved.  Log in to https://list-tracker.appspot.com to see the group.
 
-        -List-Tracker
-        """ % (member.firstname, group.groupname)
-        #put email into task queue
-        deferred.defer(admin.send_email, findgroup_email)
-        params['success'] = 'Successfully confirmed group membership for %s %s' % (member.firstname, member.lastname)
+            -List-Tracker
+            """ % (member.firstname, group.groupname)
+            #put email into task queue
+            deferred.defer(admin.send_email, confirmation_email)
+            params['success'] = 'Successfully confirmed group membership for %s %s' % (member.firstname, member.lastname)
+
+        params['text'] = member.email
+        self.render('confirm.html', **params)
 
 
 invite_email = mail.EmailMessage(sender="list.tracker.app@gmail.com")
