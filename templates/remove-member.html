@@ -13,10 +13,8 @@
 
 {% if success %}
 <hr>
-<div class="row">
-  <div class="col-md-6 col-md-offset-3 text-center">
-    <div class="success">{{success}}</div>
-  </div>
+<div class="alert alert-success" role="alert">
+  {{success}}
 </div>
   {% if removed %}
     <div class="row">

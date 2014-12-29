@@ -3,13 +3,10 @@
 {% block content %}
 
 {% if delete %}
-<div class="row">
-  <div class="col-md-4 col-md-offset-4">
-    <div class="error row text-center">
-      {{delete}}
-    </div>
+  <div class="alert alert-danger alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    {{delete}}
   </div>
-</div>
 {% endif %}
 
 <div class="row">

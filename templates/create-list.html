@@ -8,11 +8,13 @@ $(function () {
 })
 </script>
 
-<div class="row">
-  <div class="col-md-12 text-center">
-    <div class="success">{{create_success}}</div>
-  </div>
+{% if create_success %}
+<div class="alert alert-success alert-dismissible" role="alert">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  {{create_success}}
 </div>
+<hr>
+{% endif %}
 
 <div class="row">
   <div class="col-md-12 text-center">
