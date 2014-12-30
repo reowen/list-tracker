@@ -295,11 +295,14 @@ class InviteToGroup(admin.Handler):
 
                 """ % (msg, self.user.firstname, self.user.lastname, g, join_key, u_id)
 
-                sent_msg = sent_msg + (', %s' % email)
+                #compile a list of the email addresses being sent to
+                sent_msg = sent_msg + (' %s,' % email)
                 #put email into task queue
                 deferred.defer(admin.send_email, invite_email)
 
-            params['success'] = 'Emails have been sent to the following addresses: %s' % sent_msg
+            #remove final comma from list of sent emails
+            sent_msg = sent_msg[:-1]
+            params['success'] = 'Emails have been sent to the following addresses:%s' % sent_msg
         self.render('invite-to-group.html', **params)
 
 class JoinGroupEmail(admin.Handler):
