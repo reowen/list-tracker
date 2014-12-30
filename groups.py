@@ -270,33 +270,50 @@ class InviteToGroup(admin.Handler):
             group.join_key = join_key
             group.put()
 
+            sent_msg = ''
             invite_email.subject = '%s %s has invited you to List-Tracker!' % (self.user.firstname, self.user.lastname)
-            invite_email.body = """
-            %s
-
-            ---
-            Your friend %s %s is inviting you to join a list-tracker shared group.  This group allows you to coordinate gift-lists with friends.  It keeps track of who has bought what, so you don't need to worry about double-gifting.
-
-            Click the link below to get started:
-
-            https://list-tracker.appspot.com/my-groups/join-group-email?g=%s&v=%s
-
-            -The List-Tracker team
-
-            """ % (msg, self.user.firstname, self.user.lastname, g, join_key)
-
             for email in friends[0]:
                 invite_email.to = email
+                #check if user already exists (to help verify on shared computers)
+                u = admin.User.by_email(email)
+                if u:
+                    u_id = str(u.key.id())
+                else:
+                    u_id = ''
+
+                invite_email.body = """
+                %s
+
+                ---
+                Your friend %s %s is inviting you to join a list-tracker shared group.  This group allows you to coordinate gift-lists with friends.  It keeps track of who has bought what, so you don't need to worry about double-gifting.
+
+                Click the link below to get started:
+
+                https://list-tracker.appspot.com/my-groups/join-group-email?g=%s&v=%s&u=%s
+
+                -The List-Tracker team
+
+                """ % (msg, self.user.firstname, self.user.lastname, g, join_key, u_id)
+
+                sent_msg = sent_msg + (', %s' % email)
                 #put email into task queue
                 deferred.defer(admin.send_email, invite_email)
-            params['success'] = 'Emails have been sent! %s' % friends[0]
+
+            params['success'] = 'Emails have been sent to the following addresses: %s' % sent_msg
         self.render('invite-to-group.html', **params)
 
 class JoinGroupEmail(admin.Handler):
     def get(self):
         g = self.request.get('g')
         v = self.request.get('v')
+        u = self.request.get('u')
         if not self.user:
+            group_invite = 'True'
+            self.redirect('/login?g=%s&v=%s&group-invite=%s' % (g, v, group_invite))
+        #i.e. if it's a shared computer and someone is logged in as another user
+        elif u != str(self.user.key.id()):
+            self.logout()
+            time.sleep(0.1)
             group_invite = 'True'
             self.redirect('/login?g=%s&v=%s&group-invite=%s' % (g, v, group_invite))
         else:

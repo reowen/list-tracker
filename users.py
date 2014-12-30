@@ -67,7 +67,7 @@ class Signup(admin.Handler):
             u.put()
             self.login(u)
             if group_invite:
-                self.redirect('/my-groups/join-group-email?g=%s&v=%s&group-invite=%s' % (g, v, group_invite))
+                self.redirect('/my-groups/join-group-email?g=%s&v=%s&u=%s&group-invite=%s' % (g, v, u.key.id(), group_invite))
             else:
                 self.redirect('/signup/welcome')
 
@@ -103,7 +103,7 @@ class Login(admin.Handler):
             else:
                 self.login(u)
             if group_invite:
-                self.redirect('/my-groups/join-group-email?g=%s&v=%s&group-invite=%s' % (g, v, group_invite))
+                self.redirect('/my-groups/join-group-email?g=%s&v=%s&u=%s&group-invite=%s' % (g, v, u.key.id(), group_invite))
             else:
                 self.redirect('/')
         else:
@@ -250,6 +250,7 @@ class RecoverPassword(admin.Handler):
 
 class ResetPassword(admin.Handler):
     def get(self):
+        self.logout()
         u = self.request.get('u')
         v = self.request.get('v')
         params = {}
