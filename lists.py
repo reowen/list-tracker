@@ -384,7 +384,7 @@ class EditList(admin.Handler):
                 admin.WishList.by_user(self.user.key.id(), update = True)
                 #update group-lists cache
                 admin.WishList.by_group(l_new_group_id, update = True)
-                params['success'] = 'Successfully updated your list. %s'
+                params['success'] = 'Successfully updated your list.'
 
             self.render('edit-list.html', **params)
 
