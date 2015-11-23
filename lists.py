@@ -275,8 +275,13 @@ class EditList(admin.Handler):
     def post(self):
         new_items = []
         render_row = []
-        length = len(render_row)
-        numrows = len(render_row) + 5
+        # Fix the edit list bug
+        l = self.request.get('l')
+        l_render = admin.WishList.by_id(int(l))
+
+        length = len(list(l_render.items))
+        numrows = length + 5
+
         has_error = False
         listname = self.request.get('listname')
         params = dict(user = self.user,
@@ -293,7 +298,7 @@ class EditList(admin.Handler):
         else:
             params['listname'] = listname
 
-        for row in range(0, numrows):
+        for row in range(0, numrows): #update to range(0, numrows)
             item_req = 'item_%s' % row
             item = self.request.get(item_req)
 
@@ -379,7 +384,7 @@ class EditList(admin.Handler):
                 admin.WishList.by_user(self.user.key.id(), update = True)
                 #update group-lists cache
                 admin.WishList.by_group(l_new_group_id, update = True)
-                params['success'] = 'Successfully updated your list.'
+                params['success'] = 'Successfully updated your list. %s'
 
             self.render('edit-list.html', **params)
 
